@@ -1,0 +1,83 @@
+.gradientbw.section {
+  background: linear-gradient(90deg, #000 0%, #fff 100%);
+}
+
+.hero_lux {
+  background: radial-gradient(circle at center, #140018 0%, #000000 75%);
+  padding: 120px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero_lux::before {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,0,150,0.25), transparent 70%);
+  top: -150px;
+  left: -150px;
+  filter: blur(140px);
+}
+
+.hero_lux::after {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0,150,255,0.2), transparent 70%);
+  bottom: -150px;
+  right: -150px;
+  filter: blur(140px);
+}
+
+.hero_lux h1 {
+  font-size: 72px;
+  font-weight: bold;
+  line-height: 1.1;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.hero_lux p {
+  font-size: 20px;
+  color: #CFCFCF;
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+  text-align: center;
+}
+
+.hero_lux .button-primary {
+  background: white;
+  color: black;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.hero_lux .button-primary:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+.hero_lux .button-secondary {
+  background: transparent;
+  color: white;
+  padding: 15px 30px;
+  border: 2px solid white;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.hero_lux .button-secondary:hover {
+  background: white;
+  color: black;
+}
