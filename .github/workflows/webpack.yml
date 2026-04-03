@@ -18,7 +18,13 @@ jobs:
       with:
         node-version: 20.x
 
+    - name: Install Wix CLI
+      run: npm install -g @wix/cli
+
+    - name: Install dependencies
+      run: npm install --ignore-scripts
+
     - name: Build Preview
-      run: |
-        npm install
-        npx @wix/cli build
+      env:
+        WIX_AUTH_TOKEN: ${{ secrets.WIX_AUTH_TOKEN }}
+      run: wix preview --source local
