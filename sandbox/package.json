@@ -1,0 +1,12 @@
+{
+  "name": "sandbox",
+  "version": "1.0.0",
+  "description": "Isolated sandbox for experiments and prototyping.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": ["sandbox", "experiment", "prototype"],
+  "author": "",
+  "license": "MIT"
+}
