@@ -1,0 +1,4 @@
+@baseUrl = https://jaypventuresllc.com
+
+GET {{baseUrl}}/
+Content-Type: application/json
