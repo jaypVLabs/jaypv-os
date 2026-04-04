@@ -19,10 +19,10 @@ jobs:
         node-version: 20.x
 
     - name: Install Wix CLI
-      run: npm install -g @wix/cli
+      run: npm install -g @wix/cli@1.1.174
 
     - name: Install dependencies
-      run: npm install --ignore-scripts
+      run: npm ci --ignore-scripts
 
     - name: Build Preview
       env:
