@@ -1,10 +1,125 @@
-// API Reference: https://www.wix.com/velo/reference/api-overview/introduction
-// “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+import wixStores from 'wix-stores';
+import wixLocation from 'wix-location';
+import { formatCurrency } from 'public/utils';
 
 $w.onReady(function () {
-    // Write your JavaScript here
-
-    // To select an element by ID use: $w('#elementID')
-
-    // Click 'Preview' to run your code
+    _loadCart();
+    _setupCheckoutButton();
+    _setupContinueShoppingButton();
 });
+
+/**
+ * Load current cart and render line items into the repeater.
+ */
+function _loadCart() {
+    wixStores.getCart()
+        .then((cart) => {
+            const items = cart.lineItems || [];
+
+            if (items.length === 0) {
+                if (_exists('#emptyCartMessage')) $w('#emptyCartMessage').show();
+                if (_exists('#cartContents')) $w('#cartContents').hide();
+                if (_exists('#checkoutButton')) $w('#checkoutButton').disable();
+                return;
+            }
+
+            if (_exists('#emptyCartMessage')) $w('#emptyCartMessage').hide();
+            if (_exists('#cartContents')) $w('#cartContents').show();
+
+            if (_exists('#cartRepeater')) {
+                $w('#cartRepeater').data = items.map((item) => ({
+                    _id: item._id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    image: (item.mediaItem && item.mediaItem.src) || '',
+                }));
+
+                $w('#cartRepeater').onItemReady(($item, itemData) => {
+                    if (_exists('#itemName')) $item('#itemName').text = itemData.name;
+                    if (_exists('#itemPrice')) $item('#itemPrice').text = formatCurrency(itemData.price);
+                    if (_exists('#itemQuantity')) $item('#itemQuantity').value = String(itemData.quantity);
+                    if (_exists('#itemImage') && itemData.image) {
+                        $item('#itemImage').src = itemData.image;
+                    }
+
+                    if (_exists('#removeItemButton')) {
+                        $item('#removeItemButton').onClick(() => _removeItem(itemData._id));
+                    }
+
+                    if (_exists('#itemQuantity')) {
+                        $item('#itemQuantity').onChange((event) => {
+                            const qty = parseInt(event.target.value, 10);
+                            if (qty > 0) _updateQuantity(itemData._id, qty);
+                        });
+                    }
+                });
+            }
+
+            _updateTotals(cart);
+        })
+        .catch(() => {
+            if (_exists('#cartError')) {
+                $w('#cartError').text = 'Could not load cart. Please refresh the page.';
+                $w('#cartError').show();
+            }
+        });
+}
+
+/**
+ * Update the displayed cart total.
+ */
+function _updateTotals(cart) {
+    if (!_exists('#cartTotal')) return;
+    const subtotal = (cart.totals && cart.totals.subtotal) || 0;
+    $w('#cartTotal').text = formatCurrency(subtotal);
+}
+
+/**
+ * Remove a line item from the cart then refresh.
+ */
+function _removeItem(itemId) {
+    wixStores.cart.removeItem(itemId)
+        .then(() => _loadCart())
+        .catch(() => {});
+}
+
+/**
+ * Update the quantity of a cart line item then refresh totals.
+ */
+function _updateQuantity(itemId, quantity) {
+    wixStores.cart.updateLineItemQuantity([{ _id: itemId, quantity }])
+        .then(() => _loadCart())
+        .catch(() => {});
+}
+
+/**
+ * Navigate to Wix Stores checkout.
+ */
+function _setupCheckoutButton() {
+    if (!_exists('#checkoutButton')) return;
+    $w('#checkoutButton').onClick(() => {
+        wixLocation.to('/checkout');
+    });
+}
+
+/**
+ * Navigate back to the store.
+ */
+function _setupContinueShoppingButton() {
+    if (!_exists('#continueShoppingButton')) return;
+    $w('#continueShoppingButton').onClick(() => {
+        wixLocation.to('/shop');
+    });
+}
+
+/**
+ * Returns true if an element with the given selector exists on the current page.
+ */
+function _exists(selector) {
+    try {
+        return Boolean($w(selector).type);
+    } catch (_e) {
+        return false;
+    }
+}

@@ -1,0 +1,17 @@
+// Backend web module: member order history
+// Import with: import { getMemberOrders } from 'backend/orders'
+
+import wixStoresBackend from 'wix-stores-backend';
+
+/**
+ * Retrieves the order history for the currently logged-in member.
+ *
+ * @returns {Promise<Array>} List of order objects
+ */
+export async function getMemberOrders() {
+    const results = await wixStoresBackend.orders.queryOrders()
+        .limit(20)
+        .descending('_createdDate')
+        .find();
+    return results.items;
+}
