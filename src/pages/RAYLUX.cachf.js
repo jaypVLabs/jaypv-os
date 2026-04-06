@@ -1,10 +1,23 @@
-// API Reference: https://www.wix.com/velo/reference/api-overview/introduction
-// “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+import wixLocation from 'wix-location';
 
 $w.onReady(function () {
-    // Write your JavaScript here
-
-    // To select an element by ID use: $w('#elementID')
-
-    // Click 'Preview' to run your code
+    _animateHero();
+    _setupShopButton();
 });
+
+function _animateHero() {
+    ['#rayluxTitle', '#rayluxTagline'].forEach((sel, i) => {
+        if (!_exists(sel)) return;
+        $w(sel).hide();
+        setTimeout(() => $w(sel).show('fade', { duration: 600 }), 200 + i * 200);
+    });
+}
+
+function _setupShopButton() {
+    if (!_exists('#shopRayluxButton')) return;
+    $w('#shopRayluxButton').onClick(() => wixLocation.to('/shop/raylux'));
+}
+
+function _exists(selector) {
+    try { return Boolean($w(selector).type); } catch (_e) { return false; }
+}

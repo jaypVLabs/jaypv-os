@@ -13,6 +13,13 @@
         "siteMember": { "invoke": false },
         "anonymous": { "invoke": true }
       }
+    },
+    "orders": {
+      "getMemberOrders": {
+        "siteOwner": { "invoke": true },
+        "siteMember": { "invoke": true },
+        "anonymous": { "invoke": false }
+      }
     }
   }
 }
