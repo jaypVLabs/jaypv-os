@@ -52,12 +52,12 @@ This separation ensures the core experience remains lightweight while allowing s
 
 ---
 
+
 ### Project Structure
 ```
-/app                → Wix Velo application code
+/src                → Wix Velo application code
 /load-testing       → Locust performance testing scripts
 /docs               → architecture and system documentation
-requirements.txt    → Python dependencies
 package.json        → Node dependencies and scripts
 ```
 
@@ -107,7 +107,4 @@ Every component is designed to reduce friction, increase clarity, and operate be
 - Edge-based entitlement validation (Cloudflare Workers)
 - Advanced funnel analytics and tracking
 
-Learn more about [working with the Wix CLI](https://support.wix.com/en/article/velo-working-with-the-wix-cli-beta).
 
-## Invite contributors to work with you
-Git Integration & Wix CLI extends Editor X's [concurrent editing](https://support.wix.com/en/article/editor-x-about-concurrent-editing) capabilities. Invite other developers as collaborators on your [site](https://support.wix.com/en/article/inviting-people-to-contribute-to-your-site) and your [GitHub repo](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository). Multiple developers can work on a site's code at once.
