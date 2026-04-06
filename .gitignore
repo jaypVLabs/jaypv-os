@@ -4,3 +4,10 @@ node_modules/
 .idea/
 .wix/
 jsconfig.json
+.env
+.env.local
+__pycache__/
+*.pyc
+dist/
+build/
+*.log
