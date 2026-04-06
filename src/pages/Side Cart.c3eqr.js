@@ -1,4 +1,5 @@
 import wixStores from 'wix-stores';
+import { formatCurrency } from 'public/utils';
 
 $w.onReady(function () {
     _loadSideCart();
@@ -35,7 +36,7 @@ function _loadSideCart() {
                     $item('#sideCartItemQty').text = `x${itemData.quantity}`;
                 }
                 if (_exists('#sideCartItemPrice')) {
-                    $item('#sideCartItemPrice').text = `$${(itemData.price * itemData.quantity).toFixed(2)}`;
+                    $item('#sideCartItemPrice').text = formatCurrency(itemData.price * itemData.quantity);
                 }
                 if (_exists('#sideCartItemImage') && itemData.image) {
                     $item('#sideCartItemImage').src = itemData.image;
@@ -50,7 +51,7 @@ function _loadSideCart() {
             });
 
             if (_exists('#sideCartSubtotal') && cart.totals) {
-                $w('#sideCartSubtotal').text = `$${cart.totals.subtotal.toFixed(2)}`;
+                $w('#sideCartSubtotal').text = formatCurrency(cart.totals.subtotal);
             }
         })
         .catch(() => {});

@@ -1,3 +1,5 @@
+import wixData from 'wix-data';
+
 $w.onReady(function () {
     _setupCategoryFilter();
     _setupPagination();

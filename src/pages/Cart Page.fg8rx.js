@@ -1,5 +1,6 @@
 import wixStores from 'wix-stores';
 import wixLocation from 'wix-location';
+import { formatCurrency } from 'public/utils';
 
 $w.onReady(function () {
     _loadCart();
@@ -36,7 +37,7 @@ function _loadCart() {
 
                 $w('#cartRepeater').onItemReady(($item, itemData) => {
                     if (_exists('#itemName')) $item('#itemName').text = itemData.name;
-                    if (_exists('#itemPrice')) $item('#itemPrice').text = `$${itemData.price.toFixed(2)}`;
+                    if (_exists('#itemPrice')) $item('#itemPrice').text = formatCurrency(itemData.price);
                     if (_exists('#itemQuantity')) $item('#itemQuantity').value = String(itemData.quantity);
                     if (_exists('#itemImage') && itemData.image) {
                         $item('#itemImage').src = itemData.image;
@@ -71,7 +72,7 @@ function _loadCart() {
 function _updateTotals(cart) {
     if (!_exists('#cartTotal')) return;
     const subtotal = (cart.totals && cart.totals.subtotal) || 0;
-    $w('#cartTotal').text = `$${subtotal.toFixed(2)}`;
+    $w('#cartTotal').text = formatCurrency(subtotal);
 }
 
 /**

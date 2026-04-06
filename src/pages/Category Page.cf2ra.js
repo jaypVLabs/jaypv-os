@@ -1,4 +1,5 @@
 import wixLocation from 'wix-location';
+import wixData from 'wix-data';
 
 $w.onReady(function () {
     _setupFilters();
