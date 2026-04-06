@@ -1,12 +1,19 @@
 {
+  "name": "jaypventuresllc-digital-infrastructure",
+  "description": "Conversion-focused digital infrastructure built on Wix Velo with automation-ready architecture.",
+  "private": false,
+  "license": "MIT",
+  "scripts": {
+    "dev": "wix dev",
+    "build": "wix build",
+    "lint": "eslint .",
+    "test:load": "locust -f load-testing/locustfile.py"
+  },
   "devDependencies": {
     "@wix/eslint-plugin-cli": "^1.0.0",
-    "eslint": "^8.25.0",
-    "react": "16.14.0"
+    "eslint": "^8.25.0"
   },
-  "scripts": {
-    "postinstall": "wix sync-types",
-    "dev": "wix dev",
-    "lint": "eslint ."
+  "dependencies": {
+    "react": "16.14.0"
   }
 }

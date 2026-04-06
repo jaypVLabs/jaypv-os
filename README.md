@@ -1,43 +1,111 @@
-# Git Integration & Wix CLI <img align="left" src="https://user-images.githubusercontent.com/89579857/185785022-cab37bf5-26be-4f11-85f0-1fac63c07d3b.png">
 
-This repo is part of Git Integration & Wix CLI, a set of tools that allows you to write, test, and publish code for your Wix site locally on your computer. 
+# JayPVentures LLC — Digital Infrastructure System
 
-Connect your site to GitHub, develop in your favorite IDE, test your code in real time, and publish your site from the command line.
+### Overview
+This repository contains a production-minded Wix Velo workspace designed to build conversion-focused digital environments supported by structured automation and scalable system design.
 
-## Set up this repository in your IDE
-This repo is connected to a Wix site. That site tracks this repo's default branch. Any code committed and pushed to that branch from your local IDE appears on the site.
+It represents the backend layer of JayPVentures LLC—where creative experiences are translated into operational systems that perform consistently, not manually.
 
-Before getting started, make sure you have the following things installed:
-* [Git](https://git-scm.com/download)
-* [Node](https://nodejs.org/en/download/), version 14.8 or later.
-* [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) or [yarn](https://yarnpkg.com/getting-started/install)
-* An SSH key [added to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+---
 
-To set up your local environment and start coding locally, do the following:
+### Positioning
+This is not a template-based website project.
 
-1. Open your terminal and navigate to where you want to store the repo.
-1. Clone the repo by running `git clone <your-repository-url>`.
-1. Navigate to the repo's directory by running `cd <directory-name>`.
-1. Install the repo's dependencies by running `npm install` or `yarn install`.
-1. Install the Wix CLI by running `npm install -g @wix/cli` or `yarn global add @wix/cli`.  
-   Once you've installed the CLI globally, you can use it with any Wix site's repo.
+It is a systems-first architecture that:
+- Reduces manual effort through automation
+- Structures monetization pathways from entry to retention
+- Aligns frontend experience with backend logic
+- Enables scalable growth without operational friction
 
-For more information, see [Setting up Git Integration & Wix CLI](https://support.wix.com/en/article/velo-setting-up-git-integration-wix-cli-beta).
+---
 
-## Write Velo code in your IDE
-Once your repo is set up, you can write code in it as you would in any other non-Wix project. The repo's file structure matches the [public](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#public), [backend](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#backend), and [page code](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#page-code) sections in Editor X.
+### Core Capabilities
+- Conversion-focused web environments (Wix Velo)
+- Structured client/user flows (forms, onboarding, booking)
+- Monetization system integration (Stripe-ready architecture)
+- Automation-ready infrastructure (API + webhook compatible)
+- Load testing utilities (Locust, Python)
 
-Learn more about [this repo's file structure](https://support.wix.com/en/article/velo-understanding-your-sites-github-repository-beta).
+---
 
-## Test your code with the Local Editor
-The Local Editor allows you test changes made to your site in real time. The code in your local IDE is synced with the Local Editor, so you can test your changes before committing them to your repo. You can also change the site design in the Local Editor and sync it with your IDE.
+### Tech Stack
+- **Frontend / Platform:** Wix Velo (JavaScript, React 16)
+- **Runtime:** Node.js
+- **Linting:** ESLint (Wix CLI standards)
+- **Testing Utilities:** Python (Locust, python-dotenv)
 
-Start the Local Editor by navigating to this repo's directory in your terminal and running `wix dev`.
+---
 
-For more information, see [Working with the Local Editor](https://support.wix.com/en/article/velo-working-with-the-local-editor-beta).
+### Architecture Overview
+This project is structured into two primary layers:
 
-## Preview and publish with the Wix CLI
-The Wix CLI is a tool that allows you to work with your site locally from your computer's terminal. You can use it to build a preview version of your site and publish it. You can also use the CLI to install [approved npm packages](https://support.wix.com/en/article/velo-working-with-npm-packages) to your site.
+**1. Application Layer (Wix Velo)**
+- UI components and page logic
+- User interaction flows
+- Platform-native integrations
+
+**2. Support Layer (Python)**
+- Load testing via Locust
+- Environment simulation and performance validation
+
+This separation ensures the core experience remains lightweight while allowing system performance to be tested independently.
+
+---
+
+### Project Structure
+```
+/app                → Wix Velo application code
+/load-testing       → Locust performance testing scripts
+/docs               → architecture and system documentation
+requirements.txt    → Python dependencies
+package.json        → Node dependencies and scripts
+```
+
+---
+
+### Local Development
+**Node / Wix**
+```bash
+npm install
+npm run dev
+```
+**Python (Load Testing)**
+```bash
+pip install -r load-testing/requirements.txt
+locust -f load-testing/locustfile.py
+```
+
+---
+
+### Configuration
+Environment variables are required for secure configuration.
+
+Create a `.env` file locally using:
+```
+.env.example
+```
+Sensitive values (API keys, tokens, secrets) are never stored in this repository.
+
+---
+
+### Deployment
+Deployment is handled through the Wix CLI and platform publishing workflow.
+
+---
+
+### Philosophy
+This system is built on a simple premise:
+> Precision is a standard—not a feature.
+
+Every component is designed to reduce friction, increase clarity, and operate beyond manual dependency.
+
+---
+
+### Roadmap (Optional but Powerful)
+- Stripe automation integration layer
+- Discord role-based access systems
+- Edge-based entitlement validation (Cloudflare Workers)
+- Advanced funnel analytics and tracking
 
 Learn more about [working with the Wix CLI](https://support.wix.com/en/article/velo-working-with-the-wix-cli-beta).
 
