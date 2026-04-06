@@ -91,7 +91,7 @@ function _setupProfileEdit() {
 
     $w('#saveProfileButton').onClick(async () => {
         $w('#saveProfileButton').disable();
-        $w('#saveProfileButton').label = 'Saving\u2026';
+        $w('#saveProfileButton').label = 'Saving…';
 
         try {
             const firstName = _exists('#editFirstName') ? $w('#editFirstName').value.trim() : '';

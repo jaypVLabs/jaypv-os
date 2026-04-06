@@ -24,7 +24,7 @@ $w.onReady(function () {
         }
 
         // Disable button while sending
-        $w('#submitButton').label = 'Sending\u2026';
+        $w('#submitButton').label = 'Sending…';
         $w('#submitButton').disable();
 
         try {

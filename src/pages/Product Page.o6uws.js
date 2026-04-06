@@ -59,7 +59,7 @@ function _setupAddToCart() {
 
     $w('#addToCartButton').onClick(async () => {
         $w('#addToCartButton').disable();
-        $w('#addToCartButton').label = 'Adding\u2026';
+        $w('#addToCartButton').label = 'Adding…';
 
         const quantity = parseInt($w('#quantityInput').value, 10) || 1;
         const product = _currentProduct || $w('#productPage1').product;
