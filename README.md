@@ -41,5 +41,55 @@ The Wix CLI is a tool that allows you to work with your site locally from your c
 
 Learn more about [working with the Wix CLI](https://support.wix.com/en/article/velo-working-with-the-wix-cli-beta).
 
+## Deployment workflow
+
+### Automatic deployment to live site
+This repository is configured with **Git Integration**, which means that any code committed and pushed to the **main branch** is automatically synced to the live Wix site. There's no manual deployment step required for production updates.
+
+**Workflow:**
+```
+Make changes → Commit → Push to main branch → Wix automatically syncs → Live site updates
+```
+
+### Manual publishing
+If you need to manually publish changes to your site, use the Wix CLI:
+
+```bash
+wix publish
+```
+
+This command publishes your local changes directly to the live site. Use this when you need immediate deployment outside of the normal Git workflow.
+
+## Continuous Integration (CI/CD)
+
+This repository includes automated GitHub Actions workflows that run on every push and pull request to the main branch.
+
+### Preview builds
+The CI workflow automatically builds a preview of your site using the Wix CLI. This allows you to verify changes before they go live.
+
+**Workflow file:** `.github/workflows/webpack.yml`
+
+**What it does:**
+1. Checks out your code
+2. Sets up Node.js 20.x
+3. Installs Wix CLI v1.1.174 (pinned for stability)
+4. Installs dependencies with `npm ci --ignore-scripts`
+5. Builds a preview using `wix preview --source local`
+
+### Setting up CI authentication
+The preview build requires a `WIX_AUTH_TOKEN` secret to authenticate with Wix services.
+
+**To set up the secret:**
+1. Go to your repository Settings → Secrets and variables → Actions
+2. Click "New repository secret"
+3. Name: `WIX_AUTH_TOKEN`
+4. Value: Your Wix authentication token (obtained from Wix CLI or Wix dashboard)
+5. Click "Add secret"
+
+Without this secret, the CI workflow will fail at the preview build step.
+
+### Why `--ignore-scripts`?
+The `package.json` includes a `postinstall` script (`wix sync-types`) that requires interactive authentication with Wix. In CI environments, we use `npm ci --ignore-scripts` to bypass this step since CI uses the `WIX_AUTH_TOKEN` for authentication instead.
+
 ## Invite contributors to work with you
 Git Integration & Wix CLI extends Editor X's [concurrent editing](https://support.wix.com/en/article/editor-x-about-concurrent-editing) capabilities. Invite other developers as collaborators on your [site](https://support.wix.com/en/article/inviting-people-to-contribute-to-your-site) and your [GitHub repo](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository). Multiple developers can work on a site's code at once.
