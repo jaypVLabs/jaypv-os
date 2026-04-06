@@ -1,0 +1,36 @@
+// Backend web module: member registration
+// Import with: import { createMember } from 'backend/members'
+
+import wixMembersBackend from 'wix-members-backend';
+
+/**
+ * Registers a new site member.
+ *
+ * @param {object} options
+ * @param {string} options.email        Login email address
+ * @param {string} options.password     Plain-text password (Wix hashes it)
+ * @param {string} options.firstName
+ * @param {string} options.lastName
+ * @returns {Promise<{memberId: string}>}
+ */
+export async function createMember({ email, password, firstName, lastName }) {
+    if (!email || !password || !firstName) {
+        throw new Error('Missing required fields: email, password, firstName');
+    }
+
+    const member = await wixMembersBackend.registerMember({
+        loginEmail: email,
+        password,
+        contactInfo: {
+            firstName,
+            lastName: lastName || '',
+            emails: [email],
+        },
+        profile: {
+            nickname: firstName,
+            title: 'JayPVentures Member',
+        },
+    });
+
+    return { memberId: member._id };
+}

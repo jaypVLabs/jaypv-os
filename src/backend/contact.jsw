@@ -1,0 +1,28 @@
+// Backend web module: contact form email dispatch
+// Import with: import { sendContactEmail } from 'backend/contact'
+
+import wixCrm from 'wix-crm-backend';
+
+/**
+ * Sends a contact form submission to the site owner.
+ *
+ * @param {object} options
+ * @param {string} options.name     Sender's full name
+ * @param {string} options.email    Sender's email address
+ * @param {string} options.subject  Message subject
+ * @param {string} options.message  Message body
+ * @returns {Promise<void>}
+ */
+export async function sendContactEmail({ name, email, subject, message }) {
+    if (!name || !email || !message) {
+        throw new Error('Missing required fields: name, email, message');
+    }
+
+    // Create or update a contact so the lead is captured in the CRM
+    const nameParts = name.split(' ');
+    await wixCrm.createContact({
+        name: { first: nameParts[0], last: nameParts.slice(1).join(' ') || '' },
+        emails: [{ tag: 'main', email }],
+        notes: `Subject: ${subject || '(no subject)'}\n\n${message}`,
+    });
+}

@@ -1,16 +1,17 @@
 {
   "web-methods": {
-    "*": {
-      "*": {
-        "siteOwner": {
-          "invoke": true
-        },
-        "siteMember": {
-          "invoke": true
-        },
-        "anonymous": {
-          "invoke": true
-        }
+    "contact": {
+      "sendContactEmail": {
+        "siteOwner": { "invoke": true },
+        "siteMember": { "invoke": true },
+        "anonymous": { "invoke": true }
+      }
+    },
+    "members": {
+      "createMember": {
+        "siteOwner": { "invoke": true },
+        "siteMember": { "invoke": false },
+        "anonymous": { "invoke": true }
       }
     }
   }
