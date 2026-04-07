@@ -1,21 +1,29 @@
 
+
 # JayPVentures LLC — Digital Infrastructure System
 
-### Overview
-This repository contains a production-minded Wix Velo workspace designed to build conversion-focused digital environments supported by structured automation and scalable system design.
+**Production-ready Wix Velo workspace for conversion-focused digital infrastructure, automation, and performance testing.**
 
-It represents the backend layer of JayPVentures LLC—where creative experiences are translated into operational systems that perform consistently, not manually.
+This repo provides:
+- A clear, maintainable structure for scalable Wix Velo projects
+- Automation-ready architecture (API/webhook compatible)
+- Built-in load testing (Python/Locust)
+- Linting and CI for code quality
+
+**Quick start:**
+1. `npm install` — install Node dependencies
+2. `npm run lint` — check code quality
+3. `npm run dev` — start local Wix dev server
+4. `pip install -r load-testing/requirements.txt` — install Python test deps
+5. `locust -f load-testing/locustfile.py` — run load tests
+
+**Deployment:** See [docs/deployment.md](docs/deployment.md) for full instructions.
+
+**Stack:** Wix Velo (React 16), Node.js, ESLint, Python (Locust)
 
 ---
 
-### Positioning
-This is not a template-based website project.
-
-It is a systems-first architecture that:
-- Reduces manual effort through automation
-- Structures monetization pathways from entry to retention
-- Aligns frontend experience with backend logic
-- Enables scalable growth without operational friction
+This is not a template repo. It’s a systems-first foundation for digital products that need to scale, automate, and monetize reliably. Every step is documented for clarity and repeatability.
 
 ---
 
