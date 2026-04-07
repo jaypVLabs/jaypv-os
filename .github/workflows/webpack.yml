@@ -27,4 +27,4 @@ jobs:
     - name: Build Preview
       env:
         WIX_AUTH_TOKEN: ${{ secrets.WIX_AUTH_TOKEN }}
-      run: wix preview --source local
+      run: script -q -e -c "wix preview --source local" /dev/null
