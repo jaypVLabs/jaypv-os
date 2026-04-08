@@ -1,95 +1,118 @@
-# Git Integration & Wix CLI <img align="left" src="https://user-images.githubusercontent.com/89579857/185785022-cab37bf5-26be-4f11-85f0-1fac63c07d3b.png">
 
-This repo is part of Git Integration & Wix CLI, a set of tools that allows you to write, test, and publish code for your Wix site locally on your computer. 
 
-Connect your site to GitHub, develop in your favorite IDE, test your code in real time, and publish your site from the command line.
+# JayPVentures LLC — Digital Infrastructure System
 
-## Set up this repository in your IDE
-This repo is connected to a Wix site. That site tracks this repo's default branch. Any code committed and pushed to that branch from your local IDE appears on the site.
+**Production-ready Wix Velo workspace for conversion-focused digital infrastructure, automation, and performance testing.**
 
-Before getting started, make sure you have the following things installed:
-* [Git](https://git-scm.com/download)
-* [Node](https://nodejs.org/en/download/), version 14.8 or later.
-* [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) or [yarn](https://yarnpkg.com/getting-started/install)
-* An SSH key [added to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+This repo provides:
+- A clear, maintainable structure for scalable Wix Velo projects
+- Automation-ready architecture (API/webhook compatible)
+- Built-in load testing (Python/Locust)
+- Linting and CI for code quality
 
-To set up your local environment and start coding locally, do the following:
+**Quick start:**
+1. `npm install` — install Node dependencies
+2. `npm run lint` — check code quality
+3. `npm run dev` — start local Wix dev server
+4. `pip install -r load-testing/requirements.txt` — install Python test deps
+5. `locust -f load-testing/locustfile.py` — run load tests
 
-1. Open your terminal and navigate to where you want to store the repo.
-1. Clone the repo by running `git clone <your-repository-url>`.
-1. Navigate to the repo's directory by running `cd <directory-name>`.
-1. Install the repo's dependencies by running `npm install` or `yarn install`.
-1. Install the Wix CLI by running `npm install -g @wix/cli` or `yarn global add @wix/cli`.  
-   Once you've installed the CLI globally, you can use it with any Wix site's repo.
+**Deployment:** See [docs/deployment.md](docs/deployment.md) for full instructions.
 
-For more information, see [Setting up Git Integration & Wix CLI](https://support.wix.com/en/article/velo-setting-up-git-integration-wix-cli-beta).
+**Stack:** Wix Velo (React 16), Node.js, ESLint, Python (Locust)
 
-## Write Velo code in your IDE
-Once your repo is set up, you can write code in it as you would in any other non-Wix project. The repo's file structure matches the [public](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#public), [backend](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#backend), and [page code](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#page-code) sections in Editor X.
+---
 
-Learn more about [this repo's file structure](https://support.wix.com/en/article/velo-understanding-your-sites-github-repository-beta).
+This is not a template repo. It’s a systems-first foundation for digital products that need to scale, automate, and monetize reliably. Every step is documented for clarity and repeatability.
 
-## Test your code with the Local Editor
-The Local Editor allows you test changes made to your site in real time. The code in your local IDE is synced with the Local Editor, so you can test your changes before committing them to your repo. You can also change the site design in the Local Editor and sync it with your IDE.
+---
 
-Start the Local Editor by navigating to this repo's directory in your terminal and running `wix dev`.
+### Core Capabilities
+- Conversion-focused web environments (Wix Velo)
+- Structured client/user flows (forms, onboarding, booking)
+- Monetization system integration (Stripe-ready architecture)
+- Automation-ready infrastructure (API + webhook compatible)
+- Load testing utilities (Locust, Python)
 
-For more information, see [Working with the Local Editor](https://support.wix.com/en/article/velo-working-with-the-local-editor-beta).
+---
 
-## Preview and publish with the Wix CLI
-The Wix CLI is a tool that allows you to work with your site locally from your computer's terminal. You can use it to build a preview version of your site and publish it. You can also use the CLI to install [approved npm packages](https://support.wix.com/en/article/velo-working-with-npm-packages) to your site.
+### Tech Stack
+- **Frontend / Platform:** Wix Velo (JavaScript, React 16)
+- **Runtime:** Node.js
+- **Linting:** ESLint (Wix CLI standards)
+- **Testing Utilities:** Python (Locust, python-dotenv)
 
-Learn more about [working with the Wix CLI](https://support.wix.com/en/article/velo-working-with-the-wix-cli-beta).
+---
 
-## Deployment workflow
+### Architecture Overview
+This project is structured into two primary layers:
 
-### Automatic deployment to live site
-This repository is configured with **Git Integration**, which means that any code committed and pushed to the **main branch** is automatically synced to the live Wix site. There's no manual deployment step required for production updates.
+**1. Application Layer (Wix Velo)**
+- UI components and page logic
+- User interaction flows
+- Platform-native integrations
 
-**Workflow:**
+**2. Support Layer (Python)**
+- Load testing via Locust
+- Environment simulation and performance validation
+
+This separation ensures the core experience remains lightweight while allowing system performance to be tested independently.
+
+---
+
+
+### Project Structure
 ```
-Make changes → Commit → Push to main branch → Wix automatically syncs → Live site updates
+/src                → Wix Velo application code
+/load-testing       → Locust performance testing scripts
+/docs               → architecture and system documentation
+package.json        → Node dependencies and scripts
 ```
 
-### Manual publishing
-If you need to manually publish changes to your site, use the Wix CLI:
+---
 
+### Local Development
+**Node / Wix**
 ```bash
-wix publish
+npm install
+npm run dev
+```
+**Python (Load Testing)**
+```bash
+pip install -r load-testing/requirements.txt
+locust -f load-testing/locustfile.py
 ```
 
-This command publishes your local changes directly to the live site. Use this when you need immediate deployment outside of the normal Git workflow.
+---
 
-## Continuous Integration (CI)
+### Configuration
+Environment variables are required for secure configuration.
 
-This repository includes an automated GitHub Actions workflow that runs on every push and pull request to the main branch to validate changes with a preview build. Deployment to the live site is not handled by GitHub Actions; live updates are managed through Wix Git Integration (automatically when pushing to main) or manually with the Wix CLI (`wix publish`).
+Create a `.env` file locally using:
+```
+.env.example
+```
+Sensitive values (API keys, tokens, secrets) are never stored in this repository.
 
-### Preview builds
-The CI workflow automatically builds a preview of your site using the Wix CLI. This allows you to verify changes before they go live.
+---
 
-**Workflow file:** `.github/workflows/webpack.yml`
+### Deployment
+Deployment is handled through the Wix CLI and platform publishing workflow.
 
-**What it does:**
-1. Checks out your code
-2. Sets up Node.js 20.x
-3. Installs Wix CLI v1.1.174 (pinned for stability)
-4. Installs dependencies with `npm ci --ignore-scripts`
-5. Builds a preview using `wix preview --source local` (wrapped with `script` command to provide a pseudo-TTY for the interactive CLI tool)
+---
 
-### Setting up CI authentication
-The preview build requires a `WIX_AUTH_TOKEN` secret to authenticate with Wix services.
+### Philosophy
+This system is built on a simple premise:
+> Precision is a standard—not a feature.
 
-**To set up the secret:**
-1. Go to your repository Settings → Secrets and variables → Actions
-2. Click "New repository secret"
-3. Name: `WIX_AUTH_TOKEN`
-4. Value: Your Wix authentication token (obtained from Wix CLI or Wix dashboard)
-5. Click "Add secret"
+Every component is designed to reduce friction, increase clarity, and operate beyond manual dependency.
 
-Without this secret, the CI workflow will fail at the preview build step.
+---
 
-### Why `--ignore-scripts`?
-The `package.json` includes a `postinstall` script (`wix sync-types`) that requires Wix authentication credentials. In CI environments, we use `npm ci --ignore-scripts` to bypass this step since the CI workflow authenticates using the `WIX_AUTH_TOKEN` secret instead.
+### Roadmap (Optional but Powerful)
+- Stripe automation integration layer
+- Discord role-based access systems
+- Edge-based entitlement validation (Cloudflare Workers)
+- Advanced funnel analytics and tracking
 
-## Invite contributors to work with you
-Git Integration & Wix CLI extends Editor X's [concurrent editing](https://support.wix.com/en/article/editor-x-about-concurrent-editing) capabilities. Invite other developers as collaborators on your [site](https://support.wix.com/en/article/inviting-people-to-contribute-to-your-site) and your [GitHub repo](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository). Multiple developers can work on a site's code at once.
+
