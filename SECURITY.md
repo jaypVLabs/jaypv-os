@@ -81,3 +81,46 @@ Do NOT:
 Security is not a feature — it is a foundational layer of every system we build.
 
 JayPVentures LLC designs infrastructure to be resilient, scalable, and protected by default.
+
+---
+
+## Security Best Practices
+
+### Never Commit Secrets
+- **Never** commit passwords, API keys, tokens, or other sensitive credentials to the repository
+- Use environment variables (`.env`) for all sensitive configuration
+- The `.env` file is gitignored and should never be committed
+- Review `.env.example` for the expected structure without actual secrets
+
+### Code Review
+- All code changes should be reviewed before merging
+- Pay special attention to files that handle authentication, authorization, or sensitive data
+- Automated security scanning runs on all pull requests
+
+### Dependency Management
+- Keep dependencies up to date
+- Review security advisories for dependencies regularly
+- Use `npm audit` to check for known vulnerabilities
+
+---
+
+## Security Incident Response
+
+If a security incident occurs (such as accidental credential exposure):
+
+1. **Immediately revoke** any exposed credentials
+2. **Rotate** affected passwords, API keys, or tokens
+3. **Review** commit history to identify when the exposure occurred
+4. **Notify** affected parties if user data was compromised
+5. **Document** the incident and response actions taken
+6. **Update** security practices to prevent recurrence
+
+---
+
+## Recent Security Actions
+
+### 2026-04-08: Repository Cleanup
+- Removed file containing hardcoded email credentials (`import smtplib.py`)
+- Updated `.gitignore` to prevent future credential commits
+- Cleaned up repository structure and removed junk files
+- **Action Required:** If you had access to the exposed credentials (email password for jayhere@jaypventuresllc.com), they should be considered compromised and must be rotated immediately

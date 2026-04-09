@@ -1,71 +1,111 @@
 # Deployment Guide
 
-This guide covers how to deploy your Wix Velo project using the Wix CLI, including environment setup, authentication, publishing, and rollback basics.
+This guide covers deployment for the Wix Velo project. Deployment is automated via Wix Git Integration.
+
+---
+
+## Deployment Process
+
+**Automated Deployment:**
+- Changes pushed to the `main` branch automatically sync to the live Wix site via Git Integration
+- No manual deployment steps are required
+- The site updates automatically when changes are merged
+
+**CI/CD Pipeline:**
+- GitHub Actions runs linting and validation on pull requests
+- CI checks ensure code quality before merging
+- After merge to main, Wix Git Integration handles deployment automatically
 
 ---
 
 ## Prerequisites
-- Node.js (v14.8 or later)
-- npm or yarn
-- Wix CLI (`npm install -g @wix/cli`)
-- Access to the connected Wix site
-- Required environment variables in `.env` (see `.env.example`)
+- Access to the Wix site (for manual operations if needed)
+- Git access to the repository
+- Node.js (v20 or later) for local development
+- Wix CLI for local testing: `npm install -g @wix/cli`
 
 ---
 
-## 1. Authenticate with Wix CLI
+## Local Development & Testing
 
-```bash
-wix login
-```
-- Follow the browser prompt to authenticate with your Wix account.
-- Ensure you have access to the correct site.
-
----
-
-## 2. Set Up Environment
-- Copy `.env.example` to `.env` and fill in all required values.
-- Never commit `.env` to the repository.
-
----
-
-## 3. Local Build & Test
+Before pushing changes, always test locally:
 
 ```bash
 npm install
 npm run lint
 npm run dev
 ```
-- Confirm the site runs locally and passes linting before publishing.
+
+This ensures your code passes quality checks and runs correctly.
 
 ---
 
-## 4. Publish to Wix
+## Manual Publishing (If Needed)
 
+In rare cases where manual deployment is required:
+
+1. Authenticate with Wix CLI:
+```bash
+wix login
+```
+
+2. Publish manually:
 ```bash
 wix publish
 ```
-- This will build and deploy your site to the connected Wix environment.
-- Follow any prompts for environment or site selection.
+
+**Note:** This is rarely needed since Git Integration handles deployment automatically.
 
 ---
 
-## 5. Rollback / Revert
-- If a deployment fails or needs to be reverted:
-  1. Revert to a previous commit locally (`git checkout <commit>` or use your Git provider’s UI).
-  2. Re-run `wix publish` to redeploy the previous state.
-- There is no built-in “rollback” in Wix CLI; you must redeploy a previous commit.
+## Environment Configuration
+
+- Copy `.env.example` to `.env` and configure as needed
+- Environment variables are used for local testing and load testing
+- Never commit `.env` to the repository (it's gitignored)
 
 ---
 
-## 6. Troubleshooting
-- Ensure all environment variables are set.
-- If authentication fails, re-run `wix login`.
-- For build errors, check lint output and dependency versions.
+## Rollback / Revert
+
+To rollback a deployment:
+1. Revert the problematic commit in Git
+2. Push to main branch
+3. Git Integration will automatically deploy the reverted state
+
+Alternatively:
+- Use Git provider UI to revert commits
+- Create a new PR with the revert
+- Merge to trigger automatic deployment
 
 ---
 
-## Notes
-- Only publish from a clean, tested state.
-- For production, double-check all secrets and API keys are correct in `.env`.
-- For more, see [Wix CLI documentation](https://support.wix.com/en/article/velo-working-with-the-wix-cli-beta).
+## Troubleshooting
+
+**Build Issues:**
+- Run `npm run lint` to check for code quality issues
+- Ensure all dependencies are installed with `npm install`
+- Check GitHub Actions for CI failures
+
+**Deployment Issues:**
+- Verify Git Integration is configured in Wix dashboard
+- Check that commits are successfully pushed to main branch
+- Review Wix site logs for deployment errors
+
+---
+
+## Load Testing
+
+Before deploying major changes, run load tests:
+
+```bash
+pip install -r load-testing/requirements.txt
+npm run test:load
+```
+
+---
+
+## References
+
+- [Wix CLI documentation](https://support.wix.com/en/article/velo-working-with-the-wix-cli-beta)
+- [Wix Git Integration](https://support.wix.com/en/article/velo-about-git-integration-beta)
