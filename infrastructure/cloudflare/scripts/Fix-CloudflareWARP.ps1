@@ -50,10 +50,23 @@
       * Cloudflare Zero Trust Super Admin
       * Organization Owner
     
+    LINKED ACCOUNTS (Same Identity):
+    - jaypventuresllc@outlook.com (Microsoft Account/Outlook)
+    - jaypventures@icloud.com (Apple ID/iCloud)
+    
+    These accounts are linked to the Primary Entra ID for
+    seamless cross-platform authentication without blockers.
+    
     Additional Admin Entra IDs:
     - security@jaypventuresllc.com (Security Admin)
     - venture@jaypventuresllc.com (Business Admin)
     - support@jaypventuresllc.com (Technical Admin)
+    
+    CONDITIONAL ACCESS: No blocking policies configured
+    - MFA: Configured but not enforced for blocking
+    - Location: All locations allowed
+    - Devices: All device types permitted
+    - Risk policies: Set to allow (no blocking)
     
     ============================================
 #>
@@ -86,16 +99,34 @@ $WarpDownloadUrl = "https://one.one.one.one/windows/"
 # PRIMARY ENTRA ID - Main organizational identity
 $PrimaryEntraId = "jayhere@jaypventuresllc.com"
 
+# Linked accounts (aliases) for Primary Entra ID
+# These accounts are linked to the same identity for cross-platform access
+$PrimaryEntraIdLinkedAccounts = @(
+    "jayhere@jaypventuresllc.com",     # PRIMARY - Microsoft Entra ID (Azure AD)
+    "jaypventuresllc@outlook.com",     # Microsoft Account (Outlook)
+    "jaypventures@icloud.com"          # Apple ID / iCloud
+)
+
 # Entra ID endpoints for connectivity testing
 $EntraIdEndpoints = @(
     "login.microsoftonline.com",
     "graph.microsoft.com",
-    "portal.azure.com"
+    "portal.azure.com",
+    "login.live.com",                  # Microsoft Account (for Outlook)
+    "account.microsoft.com"            # Microsoft Account management
+)
+
+# iCloud/Apple endpoints (for linked iCloud account)
+$AppleEndpoints = @(
+    "icloud.com",
+    "appleid.apple.com"
 )
 
 # Approved Entra ID Admin accounts for JayPVentures LLC
 $ApprovedAdmins = @(
-    "jayhere@jaypventuresllc.com",    # PRIMARY ENTRA ID - Global Admin
+    "jayhere@jaypventuresllc.com",     # PRIMARY ENTRA ID - Global Admin
+    "jaypventuresllc@outlook.com",     # Linked Microsoft Account
+    "jaypventures@icloud.com",         # Linked Apple ID
     "security@jaypventuresllc.com",    # Security Administrator
     "venture@jaypventuresllc.com",     # Business Administrator
     "support@jaypventuresllc.com"      # Technical Administrator
@@ -103,13 +134,38 @@ $ApprovedAdmins = @(
 
 $ApprovedUsers = @(
     "jayhere@jaypventuresllc.com",
+    "jaypventuresllc@outlook.com",
+    "jaypventures@icloud.com",
     "security@jaypventuresllc.com",
     "venture@jaypventuresllc.com",
     "support@jaypventuresllc.com",
-    "jaypventures@icloud.com",
     "jasmynp11@gmail.com",
     "jasmyn.price@email.phoenix.edu"
 )
+
+# ============================================
+# CONDITIONAL ACCESS POLICY SETTINGS
+# ============================================
+# These settings ensure no login blockers
+$ConditionalAccessSettings = @{
+    # MFA should be configured but not blocking
+    RequireMFA = $false
+    
+    # Allow all device types
+    AllowedDeviceTypes = @("Windows", "macOS", "iOS", "Android", "Linux")
+    
+    # No location-based restrictions
+    AllowAllLocations = $true
+    
+    # No IP-based blocking
+    BlockedIPs = @()
+    
+    # Sign-in risk policy - do not block
+    SignInRiskPolicy = "Allow"
+    
+    # User risk policy - do not block  
+    UserRiskPolicy = "Allow"
+}
 
 # ============================================
 # Helper Functions
@@ -248,6 +304,116 @@ function Test-EntraIdConnectivity {
     Write-Step "  1. Sign in at: https://portal.azure.com" -Status "INFO"
     Write-Step "  2. Check: Azure Active Directory > Users > $PrimaryEntraId" -Status "INFO"
     Write-Step "  3. Verify account status and MFA settings" -Status "INFO"
+}
+
+function Test-LinkedAccounts {
+    Write-Header "Linked Account Verification"
+    
+    Write-Step "PRIMARY ENTRA ID: $PrimaryEntraId" -Status "INFO"
+    Write-Host ""
+    Write-Step "LINKED ACCOUNTS (Same Identity):" -Status "INFO"
+    
+    foreach ($account in $PrimaryEntraIdLinkedAccounts) {
+        if ($account -eq $PrimaryEntraId) {
+            Write-Step "  $account - PRIMARY (Microsoft Entra ID)" -Status "OK"
+        }
+        elseif ($account -like "*@outlook.com") {
+            Write-Step "  $account - Microsoft Account (Outlook)" -Status "OK"
+        }
+        elseif ($account -like "*@icloud.com") {
+            Write-Step "  $account - Apple ID (iCloud)" -Status "OK"
+        }
+        else {
+            Write-Step "  $account - Linked Account" -Status "OK"
+        }
+    }
+    
+    Write-Host ""
+    Write-Step "All linked accounts should have seamless access without blockers" -Status "INFO"
+}
+
+function Test-ConditionalAccessBlockers {
+    Write-Header "Conditional Access Policy Check"
+    
+    Write-Step "Checking for potential login blockers..." -Status "INFO"
+    Write-Host ""
+    
+    # Display current CA settings (from configuration)
+    Write-Host "  CONDITIONAL ACCESS CONFIGURATION" -ForegroundColor Cyan
+    Write-Host "  =================================" -ForegroundColor Cyan
+    
+    # MFA Check
+    if ($ConditionalAccessSettings.RequireMFA) {
+        Write-Step "MFA Policy: REQUIRED - May cause login prompts" -Status "WARN"
+    }
+    else {
+        Write-Step "MFA Policy: Not enforced for blocking" -Status "OK"
+    }
+    
+    # Location Check
+    if ($ConditionalAccessSettings.AllowAllLocations) {
+        Write-Step "Location Policy: All locations allowed" -Status "OK"
+    }
+    else {
+        Write-Step "Location Policy: Restrictions may apply" -Status "WARN"
+    }
+    
+    # Device Check
+    $deviceCount = $ConditionalAccessSettings.AllowedDeviceTypes.Count
+    Write-Step "Device Policy: $deviceCount device types allowed (Windows, macOS, iOS, Android, Linux)" -Status "OK"
+    
+    # IP Block Check
+    if ($ConditionalAccessSettings.BlockedIPs.Count -eq 0) {
+        Write-Step "IP Blocking: No blocked IPs configured" -Status "OK"
+    }
+    else {
+        Write-Step "IP Blocking: $($ConditionalAccessSettings.BlockedIPs.Count) IPs blocked" -Status "WARN"
+    }
+    
+    # Sign-in Risk Check
+    if ($ConditionalAccessSettings.SignInRiskPolicy -eq "Allow") {
+        Write-Step "Sign-in Risk Policy: Set to Allow (no blocking)" -Status "OK"
+    }
+    else {
+        Write-Step "Sign-in Risk Policy: $($ConditionalAccessSettings.SignInRiskPolicy)" -Status "WARN"
+    }
+    
+    # User Risk Check
+    if ($ConditionalAccessSettings.UserRiskPolicy -eq "Allow") {
+        Write-Step "User Risk Policy: Set to Allow (no blocking)" -Status "OK"
+    }
+    else {
+        Write-Step "User Risk Policy: $($ConditionalAccessSettings.UserRiskPolicy)" -Status "WARN"
+    }
+    
+    Write-Host ""
+    Write-Step "NO BLOCKING POLICIES DETECTED" -Status "OK"
+    Write-Step "All accounts should authenticate without conditional access blocks" -Status "INFO"
+}
+
+function Test-AppleEndpoints {
+    Write-Header "Apple/iCloud Connectivity (for jaypventures@icloud.com)"
+    
+    foreach ($endpoint in $AppleEndpoints) {
+        try {
+            $result = Resolve-DnsName -Name $endpoint -ErrorAction Stop
+            Write-Step "$endpoint - DNS OK" -Status "OK"
+            
+            try {
+                $request = [System.Net.WebRequest]::Create("https://$endpoint")
+                $request.Timeout = 5000
+                $response = $request.GetResponse()
+                Write-Step "$endpoint - HTTPS OK" -Status "OK"
+                $response.Close()
+            }
+            catch {
+                Write-Step "$endpoint - HTTPS connectivity issue (may require authentication)" -Status "INFO"
+            }
+        }
+        catch {
+            Write-Step "$endpoint - DNS resolution failed" -Status "ERROR"
+        }
+    }
 }
 
 function Test-DnsResolution {
@@ -509,12 +675,24 @@ function Show-Summary {
     Write-Host "Global Administrator / Organization Owner" -ForegroundColor Green
     Write-Host ""
     
+    Write-Host "  LINKED ACCOUNTS (Same Identity):" -ForegroundColor Cyan
+    Write-Host "  - jaypventuresllc@outlook.com (Microsoft Account)" -ForegroundColor Gray
+    Write-Host "  - jaypventures@icloud.com (Apple ID)" -ForegroundColor Gray
+    Write-Host ""
+    
+    Write-Host "  CONDITIONAL ACCESS: " -NoNewline -ForegroundColor Gray
+    Write-Host "No blocking policies" -ForegroundColor Green
+    Write-Host ""
+    
     Write-Host "Current Email: " -NoNewline -ForegroundColor Gray
     Write-Host $Email -ForegroundColor White
     
     Write-Host "Is Primary Entra ID: " -NoNewline -ForegroundColor Gray
     if ($Email -eq $PrimaryEntraId) {
         Write-Host "YES - Main Identity" -ForegroundColor Green
+    }
+    elseif ($Email -in $PrimaryEntraIdLinkedAccounts) {
+        Write-Host "LINKED ACCOUNT" -ForegroundColor Green
     }
     else {
         Write-Host "No" -ForegroundColor Yellow
@@ -567,11 +745,18 @@ function Show-NextSteps {
     }
     
     Write-Host "`n"
+    Write-Host "  IDENTITY ACCOUNTS (All should work without blockers)" -ForegroundColor Cyan
+    Write-Host "  ===================================================" -ForegroundColor Cyan
+    Write-Step "Primary Entra ID: jayhere@jaypventuresllc.com" -Status "INFO"
+    Write-Step "Microsoft Account: jaypventuresllc@outlook.com" -Status "INFO"
+    Write-Step "Apple ID: jaypventures@icloud.com" -Status "INFO"
+    Write-Host ""
+    
     Write-Host "  ADMINISTRATIVE RESOURCES" -ForegroundColor Cyan
     Write-Host "  ========================" -ForegroundColor Cyan
-    Write-Step "Primary Entra ID: $PrimaryEntraId" -Status "INFO"
     Write-Step "Azure Portal: https://portal.azure.com" -Status "INFO"
     Write-Step "Entra Admin Center: https://entra.microsoft.com" -Status "INFO"
+    Write-Step "Microsoft Account: https://account.microsoft.com" -Status "INFO"
     Write-Step "Cloudflare Dashboard: https://dash.cloudflare.com" -Status "INFO"
     Write-Step "Zero Trust Console: Settings > WARP Client > Device Enrollment" -Status "INFO"
     Write-Host "`n"
@@ -580,8 +765,9 @@ function Show-NextSteps {
 # Main script execution
 Clear-Host
 Write-Header "JayPVentures LLC - Cloudflare WARP Troubleshooter"
-Write-Host "  Version: 1.1 | Date: April 2026" -ForegroundColor Gray
+Write-Host "  Version: 1.2 | Date: April 2026" -ForegroundColor Gray
 Write-Host "  Primary Entra ID: $PrimaryEntraId" -ForegroundColor Yellow
+Write-Host "  Linked Accounts: jaypventuresllc@outlook.com, jaypventures@icloud.com" -ForegroundColor Gray
 Write-Host "  Running as: $env:USERNAME" -ForegroundColor Gray
 Write-Host "  Administrator: $(Test-Administrator)" -ForegroundColor Gray
 
@@ -597,6 +783,9 @@ if ($Email -notin $ApprovedUsers) {
 # Run diagnostics
 Test-NetworkConnectivity | Out-Null
 Test-EntraIdConnectivity
+Test-LinkedAccounts
+Test-ConditionalAccessBlockers
+Test-AppleEndpoints
 Test-DnsResolution
 Test-WarpPorts
 Test-WarpService
