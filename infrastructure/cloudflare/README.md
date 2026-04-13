@@ -271,8 +271,12 @@ resource "cloudflare_teams_rule" "block_malware" {
 
 ## Contact
 
-**Infrastructure Questions:** security@jaypventuresllc.com  
-**Emergency Support:** security@jaypventuresllc.com
+**Primary Administrator:** jayhere@jaypventuresllc.com (Jasmyn Price, Founder/CEO)  
+**Infrastructure & Security:** security@jaypventuresllc.com  
+**Emergency Support:** security@jaypventuresllc.com  
+**Business Operations:** venture@jaypventuresllc.com
+
+For complete user directory and group memberships, see: [docs/user-roster.md](../../docs/user-roster.md)
 
 ---
 

@@ -148,9 +148,12 @@ For complete details, see:
 
 ## 🔐 Security Contacts
 
-**Policy Questions:** security@jaypventuresllc.com  
-**Incident Reporting:** security@jaypventuresllc.com  
-**Primary Admin:** jasmynp11@gmail.com
+**Primary Administrator:** jayhere@jaypventuresllc.com (Jasmyn Price, Founder/CEO)  
+**Security Issues:** security@jaypventuresllc.com  
+**Business Operations:** venture@jaypventuresllc.com  
+**Technical Support:** support@jaypventuresllc.com
+
+For complete user directory, see: [User Roster](user-roster.md)
 
 ---
 
