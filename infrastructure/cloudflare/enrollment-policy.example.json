@@ -1,12 +1,18 @@
 {
   "name": "JayPVentures LLC Device Enrollment Policy",
-  "description": "Email-based enrollment policy for approved users",
+  "description": "Email-based enrollment policy for approved users by group (Admins, Creators, Contractors)",
   "precedence": 1,
   "require": [
     {
       "email": {
         "email": [
-          "jasmynp11@gmail.com"
+          "jayhere@jaypventuresllc.com",
+          "security@jaypventuresllc.com",
+          "venture@jaypventuresllc.com",
+          "support@jaypventuresllc.com",
+          "jaypventures@icloud.com",
+          "jasmynp11@gmail.com",
+          "jasmyn.price@email.phoenix.edu"
         ]
       }
     }

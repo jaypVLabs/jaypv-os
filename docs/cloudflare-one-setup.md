@@ -6,7 +6,8 @@ This guide documents the setup and configuration of Cloudflare One (Zero Trust) 
 
 **Organization:** JayPVentures LLC  
 **Setup Date:** April 2026  
-**Primary Contact:** jasmynp11@gmail.com
+**Primary Contact:** jayhere@jaypventuresllc.com  
+**Alternate Contact:** jaypventures@icloud.com
 
 ---
 
@@ -76,7 +77,19 @@ When setting up new devices or adding new team members:
 ### Approved Users
 
 Current approved users for device enrollment:
-- `jasmynp11@gmail.com` (Primary administrator)
+
+**Administrators:**
+- `jayhere@jaypventuresllc.com` (Primary - UPN, Founder/CEO)
+- `security@jaypventuresllc.com` (Security team)
+- `venture@jaypventuresllc.com` (Business operations)
+- `support@jaypventuresllc.com` (Technical support)
+
+**Creators:**
+- `jaypventures@icloud.com` (Creative operations)
+
+**Contractors:**
+- `jasmynp11@gmail.com` (Contract work)
+- `jasmyn.price@email.phoenix.edu` (Educational/contract)
 
 ### Adding New Users
 
@@ -290,8 +303,10 @@ Monitor activity through **Analytics** and **Logs**:
 - **Status Page:** [https://www.cloudflarestatus.com](https://www.cloudflarestatus.com)
 
 ### Internal Contacts
-- **Primary Administrator:** jasmynp11@gmail.com
+- **Primary Administrator:** jayhere@jaypventuresllc.com (Jasmyn Price, Founder/CEO)
 - **Security Issues:** security@jaypventuresllc.com
+- **Business Operations:** venture@jaypventuresllc.com
+- **Technical Support:** support@jaypventuresllc.com
 
 ---
 

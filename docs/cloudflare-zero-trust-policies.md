@@ -62,10 +62,25 @@ All devices connecting to JayPVentures LLC resources must comply with enrollment
 
 **Approved Domains:**
 - `@jaypventuresllc.com` - Primary company domain
-- Individual approved emails (listed in enrollment policies)
+- Individual approved emails (see user groups below)
 
-**Current Approved Users:**
-- jasmynp11@gmail.com (Primary Administrator)
+**Current Approved Users by Group:**
+
+**Administrators (Full Access):**
+- jayhere@jaypventuresllc.com (Jasmyn Price, Founder/CEO - Primary UPN)
+- security@jaypventuresllc.com (Security operations)
+- venture@jaypventuresllc.com (Business operations)
+- support@jaypventuresllc.com (Technical support)
+
+**Creators (Content & Development):**
+- jaypventures@icloud.com (Creative operations)
+
+**Contractors (Limited Access):**
+- jasmynp11@gmail.com (Contract work, personal account)
+- jasmyn.price@email.phoenix.edu (Educational/training account)
+
+**Alternate Contact:**
+- jaypventuresllc@outlook.com (Backup communications)
 
 ### Enrollment Requirements
 
@@ -147,14 +162,18 @@ Action: Allow
 
 Include Rules:
   - Email domain is: @jaypventuresllc.com
-  - Email is: jasmynp11@gmail.com
+  - Email is: jayhere@jaypventuresllc.com
+  - Email is: security@jaypventuresllc.com
+  - Email is: venture@jaypventuresllc.com
+  - Email is: jaypventures@icloud.com (Creators group)
 
 Require Rules:
   - Device posture check passes
-  - MFA authentication (optional)
+  - MFA authentication (required for admin access)
 
 Exclude Rules:
   - IP is in blocked country list
+  - Contractors group (unless explicitly authorized)
 ```
 
 ### Session Management
