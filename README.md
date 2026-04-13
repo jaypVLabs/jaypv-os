@@ -126,6 +126,8 @@ Want to contribute? Read our [Contributing Guidelines](CONTRIBUTING.md) to get s
 - [Access Management](docs/access-management.md) - Repository access and permissions
 - [Deployment Guide](docs/deployment.md) - How changes are deployed
 - [Security Policy](SECURITY.md) - Security guidelines and reporting
+- [Cloudflare One Setup](docs/cloudflare-one-setup.md) - Zero Trust device enrollment
+- [Cloudflare Security Policies](docs/cloudflare-zero-trust-policies.md) - Network security policies
 
 **Primary Contact:** jayhere@jaypventuresllc.com
 

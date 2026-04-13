@@ -22,3 +22,10 @@ directory-list.txt
 *credentials*
 *secret*.py
 import*.py
+
+# cloudflare - never commit actual configurations
+infrastructure/cloudflare/*-policy.json
+infrastructure/cloudflare/*-policies.json
+infrastructure/cloudflare/split-tunnel.json
+!infrastructure/cloudflare/*.example.json
+!infrastructure/cloudflare/README.md

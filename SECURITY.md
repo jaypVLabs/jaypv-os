@@ -133,6 +133,26 @@ To enable access on any device regardless of MFA status:
 
 **Security Note:** While MFA can be bypassed using PATs and SSH keys for automation and multi-device workflows, these methods maintain security through token-based authentication and can be individually revoked if compromised
 
+### Cloudflare Zero Trust Access
+
+For network-level security and device management, JayPVentures LLC uses Cloudflare One (Zero Trust):
+
+**Device Enrollment:**
+- Requires approved email address for enrollment
+- See [Cloudflare One Setup Guide](docs/cloudflare-one-setup.md) for detailed enrollment instructions
+- Current approved users managed through enrollment policies
+
+**Network Security:**
+- All traffic routed through Cloudflare Gateway
+- DNS filtering and malware protection
+- Zero Trust access policies for internal applications
+- See [Cloudflare Zero Trust Policies](docs/cloudflare-zero-trust-policies.md) for policy details
+
+**Documentation:**
+- [Cloudflare One Setup Guide](docs/cloudflare-one-setup.md) - Complete setup and enrollment process
+- [Cloudflare Zero Trust Policies](docs/cloudflare-zero-trust-policies.md) - Security policies and governance
+- [Infrastructure Configuration](infrastructure/cloudflare/README.md) - Configuration files and API usage
+
 ---
 
 ## Security Incident Response
