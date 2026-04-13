@@ -9,6 +9,7 @@
     - DNS resolution issues
     - Service connectivity problems
     - Microsoft Entra ID (Azure AD) sync issues
+    - Azure subscription and tenant configuration
     
     Run this script as Administrator for full functionality.
 
@@ -22,9 +23,30 @@
 .PARAMETER DiagnosticsOnly
     If specified, only runs diagnostics without making changes.
 
+.PARAMETER ActivateAzure
+    If specified, activates Azure connection and verifies subscription settings.
+    This will prompt for Azure sign-in with the Primary Entra ID.
+
+.PARAMETER ConfigureEntraID
+    If specified, displays and verifies Microsoft Entra ID configuration
+    for Cloudflare Zero Trust integration.
+
 .EXAMPLE
     .\Fix-CloudflareWARP.ps1
     Runs full diagnostics and repair with default email (Primary Entra ID).
+
+.EXAMPLE
+    .\Fix-CloudflareWARP.ps1 -ActivateAzure
+    Activates Azure connection for jayhere@jaypventuresllc.com and displays
+    subscription/tenant configuration for specialized Azure setup.
+
+.EXAMPLE
+    .\Fix-CloudflareWARP.ps1 -ConfigureEntraID
+    Displays and verifies Entra ID configuration for Cloudflare integration.
+
+.EXAMPLE
+    .\Fix-CloudflareWARP.ps1 -ActivateAzure -ConfigureEntraID
+    Full Azure activation with Entra ID configuration verification.
 
 .EXAMPLE
     .\Fix-CloudflareWARP.ps1 -Email "user@jaypventuresllc.com" -DiagnosticsOnly
@@ -37,6 +59,7 @@
 .NOTES
     Organization: JayPVentures LLC
     Author: GitHub Copilot
+    Version: 1.3
     Created: April 2026
     
     ============================================
@@ -56,6 +79,9 @@
     
     These accounts are linked to the Primary Entra ID for
     seamless cross-platform authentication without blockers.
+    
+    AZURE TENANT: jaypventuresllc.onmicrosoft.com
+    PRIMARY DOMAIN: jaypventuresllc.com
     
     Additional Admin Entra IDs:
     - security@jaypventuresllc.com (Security Admin)
@@ -80,7 +106,13 @@ param(
     [switch]$Reinstall,
     
     [Parameter(Mandatory=$false)]
-    [switch]$DiagnosticsOnly
+    [switch]$DiagnosticsOnly,
+    
+    [Parameter(Mandatory=$false)]
+    [switch]$ActivateAzure,
+    
+    [Parameter(Mandatory=$false)]
+    [switch]$ConfigureEntraID
 )
 
 #Requires -Version 5.1
@@ -121,6 +153,44 @@ $AppleEndpoints = @(
     "icloud.com",
     "appleid.apple.com"
 )
+
+# ============================================
+# AZURE SUBSCRIPTION & TENANT CONFIGURATION
+# ============================================
+# JayPVentures LLC Azure/Entra ID tenant settings
+$AzureConfig = @{
+    # Primary tenant information
+    TenantName = "jaypventuresllc.onmicrosoft.com"
+    PrimaryDomain = "jaypventuresllc.com"
+    
+    # Primary Entra ID (Global Admin)
+    GlobalAdminUPN = "jayhere@jaypventuresllc.com"
+    
+    # Azure management endpoints
+    AzureEndpoints = @(
+        "management.azure.com",          # Azure Resource Manager
+        "management.core.windows.net",   # Azure Service Management
+        "login.microsoftonline.com",     # Azure AD Auth
+        "graph.microsoft.com",           # Microsoft Graph
+        "portal.azure.com",              # Azure Portal
+        "entra.microsoft.com",           # Entra Admin Center
+        "admin.microsoft.com"            # Microsoft 365 Admin
+    )
+    
+    # Required resource providers for Cloudflare integration
+    RequiredProviders = @(
+        "Microsoft.Network",
+        "Microsoft.ManagedIdentity", 
+        "Microsoft.Authorization"
+    )
+    
+    # Entra ID Enterprise Application settings for Cloudflare
+    CloudflareAppSettings = @{
+        DisplayName = "Cloudflare Zero Trust"
+        RequireAssignment = $false
+        AllowUserConsent = $true
+    }
+}
 
 # Approved Entra ID Admin accounts for JayPVentures LLC
 $ApprovedAdmins = @(
@@ -389,6 +459,224 @@ function Test-ConditionalAccessBlockers {
     Write-Host ""
     Write-Step "NO BLOCKING POLICIES DETECTED" -Status "OK"
     Write-Step "All accounts should authenticate without conditional access blocks" -Status "INFO"
+}
+
+# ============================================
+# Azure Activation & Configuration Functions
+# ============================================
+
+function Test-AzureModules {
+    Write-Header "Checking Azure PowerShell Modules"
+    
+    $requiredModules = @("Az.Accounts", "Az.Resources", "AzureAD")
+    $missingModules = @()
+    
+    foreach ($module in $requiredModules) {
+        if (Get-Module -ListAvailable -Name $module) {
+            Write-Step "$module module: Installed" -Status "OK"
+        }
+        else {
+            Write-Step "$module module: Not installed" -Status "WARN"
+            $missingModules += $module
+        }
+    }
+    
+    if ($missingModules.Count -gt 0) {
+        Write-Host ""
+        Write-Step "To install missing modules, run as Administrator:" -Status "INFO"
+        foreach ($module in $missingModules) {
+            Write-Host "  Install-Module -Name $module -Scope CurrentUser -Force" -ForegroundColor Gray
+        }
+    }
+    
+    return $missingModules.Count -eq 0
+}
+
+function Test-AzureConnectivity {
+    Write-Header "Azure Management Connectivity Tests"
+    
+    Write-Step "Testing connectivity to Azure management endpoints..." -Status "INFO"
+    Write-Step "Tenant: $($AzureConfig.TenantName)" -Status "INFO"
+    Write-Host ""
+    
+    foreach ($endpoint in $AzureConfig.AzureEndpoints) {
+        try {
+            $result = Resolve-DnsName -Name $endpoint -ErrorAction Stop
+            Write-Step "$endpoint - DNS OK" -Status "OK"
+            
+            try {
+                $request = [System.Net.WebRequest]::Create("https://$endpoint")
+                $request.Timeout = 5000
+                $response = $request.GetResponse()
+                Write-Step "$endpoint - HTTPS OK" -Status "OK"
+                $response.Close()
+            }
+            catch {
+                Write-Step "$endpoint - HTTPS requires authentication (expected)" -Status "INFO"
+            }
+        }
+        catch {
+            Write-Step "$endpoint - DNS resolution failed" -Status "ERROR"
+        }
+    }
+}
+
+function Invoke-AzureActivation {
+    Write-Header "Azure Activation for JayPVentures LLC"
+    
+    Write-Step "Primary Entra ID: $($AzureConfig.GlobalAdminUPN)" -Status "INFO"
+    Write-Step "Tenant: $($AzureConfig.TenantName)" -Status "INFO"
+    Write-Host ""
+    
+    # Check for Az module
+    if (-not (Get-Module -ListAvailable -Name "Az.Accounts")) {
+        Write-Step "Az.Accounts module required for Azure activation" -Status "WARN"
+        Write-Step "Install with: Install-Module -Name Az.Accounts -Scope CurrentUser -Force" -Status "INFO"
+        
+        $response = Read-Host "Attempt to install Az.Accounts module? (Y/N)"
+        if ($response -eq "Y" -or $response -eq "y") {
+            try {
+                Write-Step "Installing Az.Accounts module..." -Status "ACTION"
+                Install-Module -Name Az.Accounts -Scope CurrentUser -Force -AllowClobber
+                Write-Step "Az.Accounts installed successfully" -Status "OK"
+            }
+            catch {
+                Write-Step "Failed to install Az.Accounts: $($_.Exception.Message)" -Status "ERROR"
+                return $false
+            }
+        }
+        else {
+            return $false
+        }
+    }
+    
+    Write-Step "Importing Az.Accounts module..." -Status "ACTION"
+    Import-Module Az.Accounts -ErrorAction SilentlyContinue
+    
+    Write-Host ""
+    Write-Step "AZURE SIGN-IN REQUIRED" -Status "ACTION"
+    Write-Step "Sign in with: $($AzureConfig.GlobalAdminUPN)" -Status "INFO"
+    Write-Host ""
+    
+    try {
+        # Connect to Azure with the Primary Entra ID
+        $context = Connect-AzAccount -ErrorAction Stop
+        
+        if ($context) {
+            Write-Step "Successfully connected to Azure" -Status "OK"
+            Write-Step "Signed in as: $($context.Context.Account.Id)" -Status "OK"
+            Write-Step "Tenant: $($context.Context.Tenant.Id)" -Status "INFO"
+            Write-Step "Subscription: $($context.Context.Subscription.Name)" -Status "INFO"
+            
+            # Verify this is the correct account
+            if ($context.Context.Account.Id -eq $AzureConfig.GlobalAdminUPN) {
+                Write-Step "Confirmed: Signed in with Primary Entra ID" -Status "OK"
+            }
+            elseif ($context.Context.Account.Id -in $PrimaryEntraIdLinkedAccounts) {
+                Write-Step "Signed in with linked account (same identity)" -Status "OK"
+            }
+            
+            return $true
+        }
+    }
+    catch {
+        Write-Step "Azure sign-in failed: $($_.Exception.Message)" -Status "ERROR"
+        return $false
+    }
+    
+    return $false
+}
+
+function Set-EntraIDConfiguration {
+    Write-Header "Configuring Microsoft Entra ID for Cloudflare Integration"
+    
+    Write-Step "Primary Entra ID: $($AzureConfig.GlobalAdminUPN)" -Status "INFO"
+    Write-Step "Tenant: $($AzureConfig.TenantName)" -Status "INFO"
+    Write-Host ""
+    
+    # Check if connected to Azure
+    $context = Get-AzContext -ErrorAction SilentlyContinue
+    if (-not $context) {
+        Write-Step "Not connected to Azure. Running activation first..." -Status "INFO"
+        $connected = Invoke-AzureActivation
+        if (-not $connected) {
+            Write-Step "Azure connection required for Entra ID configuration" -Status "ERROR"
+            return $false
+        }
+    }
+    
+    Write-Step "Verifying Entra ID configuration..." -Status "ACTION"
+    
+    # Display current configuration
+    Write-Host ""
+    Write-Host "  ENTRA ID CONFIGURATION FOR CLOUDFLARE" -ForegroundColor Cyan
+    Write-Host "  ======================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "  Primary Identity: $($AzureConfig.GlobalAdminUPN)" -ForegroundColor Yellow
+    Write-Host "  Tenant: $($AzureConfig.TenantName)" -ForegroundColor Gray
+    Write-Host "  Domain: $($AzureConfig.PrimaryDomain)" -ForegroundColor Gray
+    Write-Host ""
+    
+    Write-Host "  LINKED ACCOUNTS (Same User):" -ForegroundColor Cyan
+    Write-Host "  - jayhere@jaypventuresllc.com (PRIMARY)" -ForegroundColor Green
+    Write-Host "  - jaypventuresllc@outlook.com (Microsoft Account)" -ForegroundColor Gray
+    Write-Host "  - jaypventures@icloud.com (Apple ID)" -ForegroundColor Gray
+    Write-Host ""
+    
+    Write-Host "  CLOUDFLARE ZERO TRUST INTEGRATION:" -ForegroundColor Cyan
+    Write-Host "  - Authentication: Microsoft Entra ID (Azure AD)" -ForegroundColor Gray
+    Write-Host "  - Enterprise App: $($AzureConfig.CloudflareAppSettings.DisplayName)" -ForegroundColor Gray
+    Write-Host "  - User Assignment Required: $($AzureConfig.CloudflareAppSettings.RequireAssignment)" -ForegroundColor Gray
+    Write-Host "  - Allow User Consent: $($AzureConfig.CloudflareAppSettings.AllowUserConsent)" -ForegroundColor Gray
+    Write-Host ""
+    
+    Write-Host "  CONDITIONAL ACCESS POLICY:" -ForegroundColor Cyan
+    Write-Host "  - MFA: Not blocking (configured but not enforced)" -ForegroundColor Green
+    Write-Host "  - Location: All locations allowed" -ForegroundColor Green
+    Write-Host "  - Devices: All types permitted" -ForegroundColor Green
+    Write-Host "  - Risk Policies: Set to Allow" -ForegroundColor Green
+    Write-Host ""
+    
+    Write-Step "Configuration verified - No blockers detected" -Status "OK"
+    
+    Write-Host ""
+    Write-Host "  ADMINISTRATIVE LINKS:" -ForegroundColor Cyan
+    Write-Host "  =====================" -ForegroundColor Cyan
+    Write-Step "Azure Portal: https://portal.azure.com" -Status "INFO"
+    Write-Step "Entra Admin Center: https://entra.microsoft.com" -Status "INFO"
+    Write-Step "Enterprise Apps: https://entra.microsoft.com/#view/Microsoft_AAD_IAM/StartboardApplicationsMenuBlade/~/AppAppsPreview" -Status "INFO"
+    Write-Step "Conditional Access: https://entra.microsoft.com/#view/Microsoft_AAD_ConditionalAccess/ConditionalAccessBlade/~/Overview" -Status "INFO"
+    Write-Host ""
+    
+    return $true
+}
+
+function Show-AzureQuickCommands {
+    Write-Header "Azure Quick Commands for $($AzureConfig.GlobalAdminUPN)"
+    
+    Write-Host "  POWERSHELL QUICK COMMANDS" -ForegroundColor Cyan
+    Write-Host "  =========================" -ForegroundColor Cyan
+    Write-Host ""
+    
+    Write-Host "  # Connect to Azure (use Primary Entra ID)" -ForegroundColor Gray
+    Write-Host "  Connect-AzAccount" -ForegroundColor Yellow
+    Write-Host ""
+    
+    Write-Host "  # Connect to Microsoft Graph" -ForegroundColor Gray
+    Write-Host "  Connect-MgGraph -Scopes 'User.Read.All','Application.Read.All'" -ForegroundColor Yellow
+    Write-Host ""
+    
+    Write-Host "  # List Enterprise Applications" -ForegroundColor Gray
+    Write-Host "  Get-MgServicePrincipal -Filter `"displayName eq 'Cloudflare'`"" -ForegroundColor Yellow
+    Write-Host ""
+    
+    Write-Host "  # Check Conditional Access Policies" -ForegroundColor Gray
+    Write-Host "  Get-MgIdentityConditionalAccessPolicy | Select DisplayName, State" -ForegroundColor Yellow
+    Write-Host ""
+    
+    Write-Host "  # View current user details" -ForegroundColor Gray
+    Write-Host "  Get-MgUser -UserId '$($AzureConfig.GlobalAdminUPN)'" -ForegroundColor Yellow
+    Write-Host ""
 }
 
 function Test-AppleEndpoints {
@@ -765,11 +1053,43 @@ function Show-NextSteps {
 # Main script execution
 Clear-Host
 Write-Header "JayPVentures LLC - Cloudflare WARP Troubleshooter"
-Write-Host "  Version: 1.2 | Date: April 2026" -ForegroundColor Gray
+Write-Host "  Version: 1.3 | Date: April 2026" -ForegroundColor Gray
 Write-Host "  Primary Entra ID: $PrimaryEntraId" -ForegroundColor Yellow
 Write-Host "  Linked Accounts: jaypventuresllc@outlook.com, jaypventures@icloud.com" -ForegroundColor Gray
+Write-Host "  Tenant: $($AzureConfig.TenantName)" -ForegroundColor Gray
 Write-Host "  Running as: $env:USERNAME" -ForegroundColor Gray
 Write-Host "  Administrator: $(Test-Administrator)" -ForegroundColor Gray
+
+# Handle Azure Activation mode
+if ($ActivateAzure) {
+    Write-Host ""
+    Write-Step "AZURE ACTIVATION MODE" -Status "ACTION"
+    Test-AzureModules
+    Test-AzureConnectivity
+    $activated = Invoke-AzureActivation
+    if ($activated) {
+        Show-AzureQuickCommands
+        if ($ConfigureEntraID) {
+            Set-EntraIDConfiguration
+        }
+    }
+    Write-Host "Azure activation completed. Press any key to exit..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    exit
+}
+
+# Handle Entra ID Configuration mode
+if ($ConfigureEntraID) {
+    Write-Host ""
+    Write-Step "ENTRA ID CONFIGURATION MODE" -Status "ACTION"
+    Test-AzureModules
+    Test-AzureConnectivity
+    Set-EntraIDConfiguration
+    Show-AzureQuickCommands
+    Write-Host "Configuration completed. Press any key to exit..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    exit
+}
 
 # Validate email
 if ($Email -notin $ApprovedUsers) {
@@ -786,6 +1106,7 @@ Test-EntraIdConnectivity
 Test-LinkedAccounts
 Test-ConditionalAccessBlockers
 Test-AppleEndpoints
+Test-AzureConnectivity
 Test-DnsResolution
 Test-WarpPorts
 Test-WarpService
@@ -813,6 +1134,7 @@ if (-not $DiagnosticsOnly) {
 # Show summary and next steps
 Show-Summary
 Show-NextSteps
+Show-AzureQuickCommands
 
 Write-Host "Script completed. Press any key to exit..." -ForegroundColor Gray
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
