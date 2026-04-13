@@ -8,6 +8,17 @@ This directory contains example configuration files for JayPVentures LLC's Cloud
 
 ---
 
+## Microsoft Entra ID Configuration
+
+**Primary Entra ID (Main Identity):** `jayhere@jaypventuresllc.com`
+- Global Administrator
+- Organization Owner
+- Cloudflare Zero Trust Super Admin
+
+All Cloudflare Zero Trust authentication should be linked to this primary Entra ID for centralized identity management.
+
+---
+
 ## Files in This Directory
 
 ### `enrollment-policy.example.json`
@@ -45,21 +56,24 @@ Example split tunnel configuration.
 ### `scripts/Fix-CloudflareWARP.ps1`
 PowerShell troubleshooting and repair script for Windows administrators.
 
-**Purpose:** Diagnoses and fixes common Cloudflare WARP client issues.
+**Purpose:** Diagnoses and fixes common Cloudflare WARP client issues with Microsoft Entra ID integration.
 
 **Features:**
 - Network connectivity testing
+- Microsoft Entra ID connectivity verification
 - DNS resolution diagnostics
 - WARP service status checks
 - Automatic repair functionality
 - Cache clearing
 - Reinstallation support
 
+**Primary Entra ID:** `jayhere@jaypventuresllc.com` (default)
+
 **Usage:**
 ```powershell
 # Run as Administrator for full functionality
 
-# Basic diagnostics and repair
+# Basic diagnostics and repair (uses Primary Entra ID)
 .\Fix-CloudflareWARP.ps1
 
 # Diagnostics only (no changes)

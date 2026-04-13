@@ -8,12 +8,13 @@
     - Authentication/enrollment issues
     - DNS resolution issues
     - Service connectivity problems
+    - Microsoft Entra ID (Azure AD) sync issues
     
     Run this script as Administrator for full functionality.
 
 .PARAMETER Email
     The email address used for Cloudflare Zero Trust enrollment.
-    Default: jayhere@jaypventuresllc.com
+    Default: jayhere@jaypventuresllc.com (Primary Entra ID)
 
 .PARAMETER Reinstall
     If specified, performs a full reinstall of the WARP client.
@@ -23,7 +24,7 @@
 
 .EXAMPLE
     .\Fix-CloudflareWARP.ps1
-    Runs full diagnostics and repair with default email.
+    Runs full diagnostics and repair with default email (Primary Entra ID).
 
 .EXAMPLE
     .\Fix-CloudflareWARP.ps1 -Email "user@jaypventuresllc.com" -DiagnosticsOnly
@@ -38,11 +39,23 @@
     Author: GitHub Copilot
     Created: April 2026
     
-    Approved Admin Emails:
-    - jayhere@jaypventuresllc.com (Primary - Founder/CEO)
-    - security@jaypventuresllc.com
-    - venture@jaypventuresllc.com
-    - support@jaypventuresllc.com
+    ============================================
+    MICROSOFT ENTRA ID CONFIGURATION
+    ============================================
+    
+    PRIMARY ENTRA ID (Main Identity):
+    - jayhere@jaypventuresllc.com (Jasmyn Price, Founder/CEO)
+      * Global Administrator
+      * Primary UPN for all Microsoft/Azure services
+      * Cloudflare Zero Trust Super Admin
+      * Organization Owner
+    
+    Additional Admin Entra IDs:
+    - security@jaypventuresllc.com (Security Admin)
+    - venture@jaypventuresllc.com (Business Admin)
+    - support@jaypventuresllc.com (Technical Admin)
+    
+    ============================================
 #>
 
 [CmdletBinding()]
@@ -67,12 +80,25 @@ $ProgressPreference = "Continue"
 $WarpCliPath = "C:\Program Files\Cloudflare\Cloudflare WARP\warp-cli.exe"
 $WarpDownloadUrl = "https://one.one.one.one/windows/"
 
-# Approved emails for JayPVentures LLC
+# ============================================
+# MICROSOFT ENTRA ID CONFIGURATION
+# ============================================
+# PRIMARY ENTRA ID - Main organizational identity
+$PrimaryEntraId = "jayhere@jaypventuresllc.com"
+
+# Entra ID endpoints for connectivity testing
+$EntraIdEndpoints = @(
+    "login.microsoftonline.com",
+    "graph.microsoft.com",
+    "portal.azure.com"
+)
+
+# Approved Entra ID Admin accounts for JayPVentures LLC
 $ApprovedAdmins = @(
-    "jayhere@jaypventuresllc.com",
-    "security@jaypventuresllc.com",
-    "venture@jaypventuresllc.com",
-    "support@jaypventuresllc.com"
+    "jayhere@jaypventuresllc.com",    # PRIMARY ENTRA ID - Global Admin
+    "security@jaypventuresllc.com",    # Security Administrator
+    "venture@jaypventuresllc.com",     # Business Administrator
+    "support@jaypventuresllc.com"      # Technical Administrator
 )
 
 $ApprovedUsers = @(
@@ -187,6 +213,41 @@ function Test-NetworkConnectivity {
     }
     
     return $results
+}
+
+function Test-EntraIdConnectivity {
+    Write-Header "Microsoft Entra ID Connectivity Tests"
+    
+    Write-Step "Primary Entra ID: $PrimaryEntraId" -Status "INFO"
+    Write-Step "Verifying connectivity to Microsoft Entra ID services..." -Status "INFO"
+    
+    foreach ($endpoint in $EntraIdEndpoints) {
+        try {
+            $result = Resolve-DnsName -Name $endpoint -ErrorAction Stop
+            Write-Step "$endpoint - DNS OK" -Status "OK"
+            
+            # Test HTTPS connectivity
+            try {
+                $request = [System.Net.WebRequest]::Create("https://$endpoint")
+                $request.Timeout = 5000
+                $response = $request.GetResponse()
+                Write-Step "$endpoint - HTTPS OK" -Status "OK"
+                $response.Close()
+            }
+            catch {
+                Write-Step "$endpoint - HTTPS connectivity issue" -Status "WARN"
+            }
+        }
+        catch {
+            Write-Step "$endpoint - DNS resolution failed" -Status "ERROR"
+        }
+    }
+    
+    Write-Host "`n"
+    Write-Step "If Entra ID issues persist, verify the Primary Entra ID account:" -Status "INFO"
+    Write-Step "  1. Sign in at: https://portal.azure.com" -Status "INFO"
+    Write-Step "  2. Check: Azure Active Directory > Users > $PrimaryEntraId" -Status "INFO"
+    Write-Step "  3. Verify account status and MFA settings" -Status "INFO"
 }
 
 function Test-DnsResolution {
@@ -439,8 +500,25 @@ function Show-Summary {
     
     Write-Header "Diagnostics Summary"
     
-    Write-Host "Email: " -NoNewline -ForegroundColor Gray
+    # Entra ID Information
+    Write-Host "`n  MICROSOFT ENTRA ID CONFIGURATION" -ForegroundColor Cyan
+    Write-Host "  =================================" -ForegroundColor Cyan
+    Write-Host "  Primary Entra ID: " -NoNewline -ForegroundColor Gray
+    Write-Host $PrimaryEntraId -ForegroundColor Yellow
+    Write-Host "  Status: " -NoNewline -ForegroundColor Gray
+    Write-Host "Global Administrator / Organization Owner" -ForegroundColor Green
+    Write-Host ""
+    
+    Write-Host "Current Email: " -NoNewline -ForegroundColor Gray
     Write-Host $Email -ForegroundColor White
+    
+    Write-Host "Is Primary Entra ID: " -NoNewline -ForegroundColor Gray
+    if ($Email -eq $PrimaryEntraId) {
+        Write-Host "YES - Main Identity" -ForegroundColor Green
+    }
+    else {
+        Write-Host "No" -ForegroundColor Yellow
+    }
     
     Write-Host "Is Approved User: " -NoNewline -ForegroundColor Gray
     if ($Email -in $ApprovedUsers) {
@@ -489,6 +567,11 @@ function Show-NextSteps {
     }
     
     Write-Host "`n"
+    Write-Host "  ADMINISTRATIVE RESOURCES" -ForegroundColor Cyan
+    Write-Host "  ========================" -ForegroundColor Cyan
+    Write-Step "Primary Entra ID: $PrimaryEntraId" -Status "INFO"
+    Write-Step "Azure Portal: https://portal.azure.com" -Status "INFO"
+    Write-Step "Entra Admin Center: https://entra.microsoft.com" -Status "INFO"
     Write-Step "Cloudflare Dashboard: https://dash.cloudflare.com" -Status "INFO"
     Write-Step "Zero Trust Console: Settings > WARP Client > Device Enrollment" -Status "INFO"
     Write-Host "`n"
@@ -497,7 +580,8 @@ function Show-NextSteps {
 # Main script execution
 Clear-Host
 Write-Header "JayPVentures LLC - Cloudflare WARP Troubleshooter"
-Write-Host "  Version: 1.0 | Date: April 2026" -ForegroundColor Gray
+Write-Host "  Version: 1.1 | Date: April 2026" -ForegroundColor Gray
+Write-Host "  Primary Entra ID: $PrimaryEntraId" -ForegroundColor Yellow
 Write-Host "  Running as: $env:USERNAME" -ForegroundColor Gray
 Write-Host "  Administrator: $(Test-Administrator)" -ForegroundColor Gray
 
@@ -512,6 +596,7 @@ if ($Email -notin $ApprovedUsers) {
 
 # Run diagnostics
 Test-NetworkConnectivity | Out-Null
+Test-EntraIdConnectivity
 Test-DnsResolution
 Test-WarpPorts
 Test-WarpService
