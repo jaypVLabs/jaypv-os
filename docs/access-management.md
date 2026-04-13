@@ -104,6 +104,113 @@ When configuring access for jayhere@jaypventuresllc.com:
 - [ ] SSH key or PAT configured for Git authentication
 - [x] Email credentials rotated (after 2026-04-08 security incident)
 
+## Multi-Device Access Configuration
+
+### Configuring jayhere@jaypventuresllc.com for Access on Any Device
+
+The jayhere@jaypventuresllc.com account can be configured to work seamlessly across multiple devices without MFA barriers using token-based authentication.
+
+#### Option 1: Personal Access Tokens (Recommended for HTTPS)
+
+**GitHub PAT Setup:**
+1. Navigate to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. Click "Generate new token" → "Generate new token (classic)"
+3. Provide a descriptive name (e.g., "MacBook Pro 2026", "Windows Desktop", "Linux Laptop")
+4. Select required scopes:
+   - `repo` - Full control of private repositories
+   - `workflow` - Update GitHub Action workflows (if needed)
+   - `admin:org` - Manage organization access (if needed)
+5. Set appropriate expiration (90 days recommended, or "No expiration" for permanent devices)
+6. Generate token and save it securely
+7. Use the PAT as your password when Git prompts for credentials
+
+**Benefits:**
+- Bypasses MFA requirements for Git operations
+- Can be scoped to specific permissions
+- Can be revoked individually without affecting other devices
+- Works with HTTPS Git URLs
+
+#### Option 2: SSH Keys (Recommended for Advanced Users)
+
+**SSH Key Setup:**
+```bash
+# Generate device-specific SSH key
+ssh-keygen -t ed25519 -C "jayhere@jaypventuresllc.com-device-name"
+
+# Add to SSH agent
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+
+# Copy public key
+cat ~/.ssh/id_ed25519.pub
+```
+
+**Add to GitHub:**
+1. Go to GitHub Settings → SSH and GPG keys → New SSH key
+2. Provide descriptive title (e.g., "MacBook Pro 2026")
+3. Paste public key
+4. Save
+
+**Benefits:**
+- No MFA required for Git operations
+- More secure than password-based authentication
+- Automatically authenticates without password prompts
+- Industry standard for Git authentication
+
+#### Option 3: GitHub CLI
+
+```bash
+# Install GitHub CLI (gh)
+# macOS: brew install gh
+# Windows: winget install GitHub.cli
+# Linux: See https://github.com/cli/cli#installation
+
+# Authenticate
+gh auth login
+
+# Follow prompts - select HTTPS or SSH, authenticate via browser
+```
+
+**Benefits:**
+- Simplified authentication process
+- Works for both Git and GitHub API operations
+- Handles credential storage automatically
+
+#### Wix CLI Multi-Device Setup
+
+For each device, authenticate separately:
+
+```bash
+# Install Wix CLI globally
+npm install -g @wix/cli
+
+# Authenticate on device
+wix login
+
+# Verify authentication
+wix whoami
+```
+
+The authentication token is stored locally and doesn't require MFA for subsequent operations.
+
+#### Device Management Best Practices
+
+1. **Use Descriptive Names:** Always name credentials/keys by device for easy identification
+2. **Regular Audits:** Review GitHub Settings → SSH keys and PATs quarterly
+3. **Revoke Unused:** Remove credentials for devices no longer in use
+4. **Secure Storage:** Use OS credential managers (Keychain on macOS, Credential Manager on Windows)
+5. **Separate Credentials:** Never share tokens or keys across devices
+6. **Monitor Activity:** Check GitHub Settings → Security log for unusual access
+
+#### Emergency Access Revocation
+
+If a device is lost or compromised:
+
+1. **GitHub:** Settings → SSH and GPG keys (or Personal access tokens) → Delete
+2. **Wix:** Contact Wix support or logout from dashboard
+3. **Review:** Check GitHub security log for unauthorized activity
+4. **Rotate:** Generate new credentials for remaining devices if needed
+
 ## Git Configuration
 
 ### Setting Up Git Email

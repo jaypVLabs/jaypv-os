@@ -102,6 +102,37 @@ JayPVentures LLC designs infrastructure to be resilient, scalable, and protected
 - Review security advisories for dependencies regularly
 - Use `npm audit` to check for known vulnerabilities
 
+### Multi-Device Access Configuration
+
+#### Account: jayhere@jaypventuresllc.com
+
+To enable access on any device regardless of MFA status:
+
+**GitHub Access:**
+- Use Personal Access Tokens (PAT) with appropriate scopes instead of password authentication
+- Generate device-specific PATs from GitHub Settings → Developer settings → Personal access tokens
+- PATs bypass MFA requirements for Git operations and API access
+- Set appropriate expiration dates and revoke tokens when devices are no longer in use
+
+**Git Authentication Methods:**
+1. **HTTPS with PAT:** Use PAT as password when prompted
+2. **SSH Keys:** Generate device-specific SSH keys and add to GitHub account
+3. **GitHub CLI:** Run `gh auth login` and follow authentication flow
+
+**Wix CLI Access:**
+- Run `wix login` on each device to authenticate
+- Authentication tokens are stored locally per device
+- No MFA required after initial login flow
+
+**Best Practices for Multi-Device Access:**
+- Generate separate credentials (PATs, SSH keys) for each device
+- Use descriptive names to identify which device each credential belongs to
+- Regularly audit and revoke credentials for devices no longer in use
+- Store credentials securely using OS keychain/credential managers
+- Never share credentials across devices or users
+
+**Security Note:** While MFA can be bypassed using PATs and SSH keys for automation and multi-device workflows, these methods maintain security through token-based authentication and can be individually revoked if compromised
+
 ---
 
 ## Security Incident Response
