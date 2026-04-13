@@ -37,11 +37,13 @@ The Cloudflare One client (WARP) needs to be installed on all devices that will 
 - Android 8+
 
 **Download Links:**
-- [Windows Installer](https://install.appcenter.ms/orgs/cloudflare/apps/1.1.1.1-windows-1/distribution_groups/release)
-- [macOS Installer](https://install.appcenter.ms/orgs/cloudflare/apps/1.1.1.1-macos-1/distribution_groups/release)
-- [Linux Packages](https://pkg.cloudflareclient.com/)
+- [Windows Installer](https://one.one.one.one/windows/)
+- [macOS Installer](https://one.one.one.one/mac/)
+- [Linux Packages](https://one.one.one.one/linux/)
 - [iOS App Store](https://apps.apple.com/us/app/1-1-1-1-faster-internet/id1423538627)
 - [Google Play Store](https://play.google.com/store/apps/details?id=com.cloudflare.onedotonedotonedotone)
+
+> **Note:** If you need alternative download sources, visit the [Cloudflare WARP download page](https://1.1.1.1/) for the latest links.
 
 ---
 
