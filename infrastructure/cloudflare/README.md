@@ -42,6 +42,36 @@ Example split tunnel configuration.
 - Local domain fallback
 - Application-specific exclusions
 
+### `scripts/Fix-CloudflareWARP.ps1`
+PowerShell troubleshooting and repair script for Windows administrators.
+
+**Purpose:** Diagnoses and fixes common Cloudflare WARP client issues.
+
+**Features:**
+- Network connectivity testing
+- DNS resolution diagnostics
+- WARP service status checks
+- Automatic repair functionality
+- Cache clearing
+- Reinstallation support
+
+**Usage:**
+```powershell
+# Run as Administrator for full functionality
+
+# Basic diagnostics and repair
+.\Fix-CloudflareWARP.ps1
+
+# Diagnostics only (no changes)
+.\Fix-CloudflareWARP.ps1 -DiagnosticsOnly
+
+# Force reinstall
+.\Fix-CloudflareWARP.ps1 -Reinstall
+
+# Specify different email
+.\Fix-CloudflareWARP.ps1 -Email "user@jaypventuresllc.com"
+```
+
 ---
 
 ## Usage
