@@ -87,6 +87,12 @@ Alternatively:
 - Ensure all dependencies are installed with `npm install`
 - Check GitHub Actions for CI failures
 
+**CLI / TTY Issues in CI:**
+- Wix CLI commands (e.g., `wix sync-types`, `wix preview`) require an interactive terminal (TTY) and will fail in non-interactive CI environments.
+- The CI workflow uses `npm ci --ignore-scripts` to skip postinstall scripts (such as `wix sync-types`) that require a TTY.
+- Run `npm install` locally for full development setup (postinstall scripts run normally).
+- If you add new postinstall scripts that call the Wix CLI, CI will skip them automatically due to `--ignore-scripts`.
+
 **Deployment Issues:**
 - Verify Git Integration is configured in Wix dashboard
 - Check that commits are successfully pushed to main branch
