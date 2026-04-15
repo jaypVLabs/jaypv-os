@@ -18,6 +18,18 @@ jobs:
         with:
           node-version: 20
 
+      - name: Debug environment
+        run: |
+          echo "=== Node / npm ==="
+          node --version
+          npm --version
+          echo "=== Working directory ==="
+          pwd
+          echo "=== Repository files ==="
+          ls -la
+          echo "=== package.json scripts ==="
+          cat package.json | python3 -c "import json,sys; d=json.load(sys.stdin); print(json.dumps(d.get('scripts',{}), indent=2))"
+
       - name: Install Node.js dependencies
         run: npm ci --ignore-scripts
 
@@ -28,6 +40,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Debug Python environment
+        run: |
+          echo "=== Python / pip ==="
+          python --version
+          pip --version
+          echo "=== load-testing/requirements.txt ==="
+          cat load-testing/requirements.txt
 
       - name: Install Python dependencies
         run: |
