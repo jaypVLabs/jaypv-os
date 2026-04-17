@@ -36,23 +36,23 @@ function _loadCart() {
                 }));
 
                 $w('#cartRepeater').onItemReady(($item, itemData) => {
-                    if (_exists('#itemName')) $item('#itemName').text = itemData.name;
-                    if (_exists('#itemPrice')) $item('#itemPrice').text = formatCurrency(itemData.price);
-                    if (_exists('#itemQuantity')) $item('#itemQuantity').value = String(itemData.quantity);
-                    if (_exists('#itemImage') && itemData.image) {
-                        $item('#itemImage').src = itemData.image;
-                    }
+                    try { $item('#itemName').text = itemData.name; } catch (_e) {}
+                    try { $item('#itemPrice').text = formatCurrency(itemData.price); } catch (_e) {}
+                    try { $item('#itemQuantity').value = String(itemData.quantity); } catch (_e) {}
+                    try {
+                        if (itemData.image) $item('#itemImage').src = itemData.image;
+                    } catch (_e) {}
 
-                    if (_exists('#removeItemButton')) {
+                    try {
                         $item('#removeItemButton').onClick(() => _removeItem(itemData._id));
-                    }
+                    } catch (_e) {}
 
-                    if (_exists('#itemQuantity')) {
+                    try {
                         $item('#itemQuantity').onChange((event) => {
                             const qty = parseInt(event.target.value, 10);
                             if (qty > 0) _updateQuantity(itemData._id, qty);
                         });
-                    }
+                    } catch (_e) {}
                 });
             }
 

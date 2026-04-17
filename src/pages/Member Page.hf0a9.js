@@ -71,10 +71,10 @@ async function _loadOrderHistory() {
         }));
 
         $w('#ordersRepeater').onItemReady(($item, itemData) => {
-            if (_exists('#orderNumber')) $item('#orderNumber').text = `#${itemData.number}`;
-            if (_exists('#orderDate')) $item('#orderDate').text = itemData.date;
-            if (_exists('#orderTotal')) $item('#orderTotal').text = itemData.total;
-            if (_exists('#orderStatus')) $item('#orderStatus').text = itemData.status;
+            try { $item('#orderNumber').text = `#${itemData.number}`; } catch (_e) {}
+            try { $item('#orderDate').text = itemData.date; } catch (_e) {}
+            try { $item('#orderTotal').text = itemData.total; } catch (_e) {}
+            try { $item('#orderStatus').text = itemData.status; } catch (_e) {}
         });
     } catch (_err) {
         if (_exists('#ordersError')) {

@@ -31,23 +31,21 @@ function _loadSideCart() {
             }));
 
             $w('#sideCartRepeater').onItemReady(($item, itemData) => {
-                if (_exists('#sideCartItemName')) $item('#sideCartItemName').text = itemData.name;
-                if (_exists('#sideCartItemQty')) {
-                    $item('#sideCartItemQty').text = `x${itemData.quantity}`;
-                }
-                if (_exists('#sideCartItemPrice')) {
+                try { $item('#sideCartItemName').text = itemData.name; } catch (_e) {}
+                try { $item('#sideCartItemQty').text = `x${itemData.quantity}`; } catch (_e) {}
+                try {
                     $item('#sideCartItemPrice').text = formatCurrency(itemData.price * itemData.quantity);
-                }
-                if (_exists('#sideCartItemImage') && itemData.image) {
-                    $item('#sideCartItemImage').src = itemData.image;
-                }
-                if (_exists('#sideCartRemoveButton')) {
+                } catch (_e) {}
+                try {
+                    if (itemData.image) $item('#sideCartItemImage').src = itemData.image;
+                } catch (_e) {}
+                try {
                     $item('#sideCartRemoveButton').onClick(() => {
                         wixStores.cart.removeItem(itemData._id)
                             .then(() => _loadSideCart())
                             .catch(() => {});
                     });
-                }
+                } catch (_e) {}
             });
 
             if (_exists('#sideCartSubtotal') && cart.totals) {

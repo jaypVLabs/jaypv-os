@@ -15,7 +15,7 @@ function _setupFilters() {
     if (!_exists('#filterRepeater')) return;
 
     $w('#filterRepeater').onItemReady(($item, itemData) => {
-        if (!_exists('#filterButton')) return;
+        try { $item('#filterButton'); } catch (_e) { return; }
         $item('#filterButton').onClick(() => {
             if (!_exists('#productsDataset')) return;
             if (itemData.value === 'all') {

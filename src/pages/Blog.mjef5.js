@@ -13,7 +13,7 @@ function _setupCategoryFilter() {
     if (!_exists('#categoryRepeater')) return;
 
     $w('#categoryRepeater').onItemReady(($item, itemData) => {
-        if (!_exists('#categoryButton')) return;
+        try { $item('#categoryButton'); } catch (_e) { return; }
         $item('#categoryButton').onClick(() => {
             if (!_exists('#blogPostsDataset')) return;
             if (!itemData.slug || itemData.slug === 'all') {

@@ -1,4 +1,3 @@
-import wixAnimations from 'wix-animations';
 import wixWindow from 'wix-window';
 
 $w.onReady(function () {

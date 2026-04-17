@@ -1,5 +1,4 @@
 import wixLocation from 'wix-location';
-import wixWindow from 'wix-window';
 
 $w.onReady(function () {
     _displayOrderConfirmation();
