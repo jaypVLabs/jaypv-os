@@ -20,7 +20,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Node.js dependencies
-        run: npm ci --ignore-scripts
+        run: npm install
 
       - name: Run lint
         run: npm run lint
