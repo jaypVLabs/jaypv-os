@@ -23,7 +23,7 @@ function _setupCategoryFilter() {
                         wixData.filter().hasSome('categories', [itemData.slug])
                     );
                 }
-                $w('#blogPostsDataset').loadPage(1);
+                // setFilter() resets the dataset to page 1 automatically
             });
         } catch (_e) {}
     });
