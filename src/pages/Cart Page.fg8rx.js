@@ -3,6 +3,30 @@ import wixLocation from 'wix-location';
 import { formatCurrency } from 'public/utils';
 
 $w.onReady(function () {
+    // Register onItemReady ONCE here so repeated _loadCart() calls
+    // do not stack duplicate handlers on the repeater.
+    if (_exists('#cartRepeater')) {
+        $w('#cartRepeater').onItemReady(($item, itemData) => {
+            try { $item('#itemName').text = itemData.name; } catch (_e) {}
+            try { $item('#itemPrice').text = formatCurrency(itemData.price); } catch (_e) {}
+            try { $item('#itemQuantity').value = String(itemData.quantity); } catch (_e) {}
+            try {
+                if (itemData.image) $item('#itemImage').src = itemData.image;
+            } catch (_e) {}
+
+            try {
+                $item('#removeItemButton').onClick(() => _removeItem(itemData._id));
+            } catch (_e) {}
+
+            try {
+                $item('#itemQuantity').onChange((event) => {
+                    const qty = parseInt(event.target.value, 10);
+                    if (qty > 0) _updateQuantity(itemData._id, qty);
+                });
+            } catch (_e) {}
+        });
+    }
+
     _loadCart();
     _setupCheckoutButton();
     _setupContinueShoppingButton();
@@ -27,27 +51,6 @@ function _loadCart() {
             if (_exists('#cartContents')) $w('#cartContents').show();
 
             if (_exists('#cartRepeater')) {
-                // Register onItemReady BEFORE assigning data so every item is caught
-                $w('#cartRepeater').onItemReady(($item, itemData) => {
-                    try { $item('#itemName').text = itemData.name; } catch (_e) {}
-                    try { $item('#itemPrice').text = formatCurrency(itemData.price); } catch (_e) {}
-                    try { $item('#itemQuantity').value = String(itemData.quantity); } catch (_e) {}
-                    try {
-                        if (itemData.image) $item('#itemImage').src = itemData.image;
-                    } catch (_e) {}
-
-                    try {
-                        $item('#removeItemButton').onClick(() => _removeItem(itemData._id));
-                    } catch (_e) {}
-
-                    try {
-                        $item('#itemQuantity').onChange((event) => {
-                            const qty = parseInt(event.target.value, 10);
-                            if (qty > 0) _updateQuantity(itemData._id, qty);
-                        });
-                    } catch (_e) {}
-                });
-
                 $w('#cartRepeater').data = items.map((item) => ({
                     _id: item._id,
                     name: item.name,

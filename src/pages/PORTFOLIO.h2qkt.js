@@ -10,8 +10,7 @@ function _setupBrandFilter() {
     const brands = ['raylux', 'vitaglow', 'zynth', 'bestbakery', 'studio'];
 
     brands.forEach((brand) => {
-        const tabSel  = `#${brand}Tab`;
-        const cardSel = `#${brand}Card`;
+        const tabSel = `#${brand}Tab`;
         if (!_exists(tabSel)) return;
 
         $w(tabSel).onClick(() => {
