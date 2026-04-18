@@ -99,7 +99,7 @@ function _setupProfileEdit() {
             const firstName = _exists('#editFirstName') ? $w('#editFirstName').value.trim() : '';
             const lastName  = _exists('#editLastName')  ? $w('#editLastName').value.trim()  : '';
 
-            await wixUsers.currentUser.updateMember({
+            await wixUsers.currentUser.updateCurrentUser({
                 contactDetails: { firstName, lastName },
             });
 

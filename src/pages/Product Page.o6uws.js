@@ -83,7 +83,7 @@ function _setupAddToCart() {
         }
 
         try {
-            await wixStores.cart.addToCart(product._id, quantity, { options });
+            await wixStores.cart.addToCart(product._id, quantity, { choices: options });
             $w('#addToCartButton').label = 'Added!';
             setTimeout(() => {
                 $w('#addToCartButton').label = 'Add to Cart';

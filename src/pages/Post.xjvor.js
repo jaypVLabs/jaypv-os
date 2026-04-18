@@ -12,7 +12,7 @@ $w.onReady(function () {
 function _setupShareButtons() {
     const pageUrl = encodeURIComponent(wixLocation.url);
     const pageTitle = encodeURIComponent(
-        _exists('#postTitle') ? $w('#postTitle').text : document.title || ''
+        _exists('#postTitle') ? $w('#postTitle').text : ''
     );
 
     if (_exists('#shareTwitterButton')) {
