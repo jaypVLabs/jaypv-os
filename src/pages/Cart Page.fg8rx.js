@@ -27,14 +27,7 @@ function _loadCart() {
             if (_exists('#cartContents')) $w('#cartContents').show();
 
             if (_exists('#cartRepeater')) {
-                $w('#cartRepeater').data = items.map((item) => ({
-                    _id: item._id,
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity,
-                    image: (item.mediaItem && item.mediaItem.src) || '',
-                }));
-
+                // Register onItemReady BEFORE assigning data so every item is caught
                 $w('#cartRepeater').onItemReady(($item, itemData) => {
                     try { $item('#itemName').text = itemData.name; } catch (_e) {}
                     try { $item('#itemPrice').text = formatCurrency(itemData.price); } catch (_e) {}
@@ -54,6 +47,14 @@ function _loadCart() {
                         });
                     } catch (_e) {}
                 });
+
+                $w('#cartRepeater').data = items.map((item) => ({
+                    _id: item._id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    image: (item.mediaItem && item.mediaItem.src) || '',
+                }));
             }
 
             _updateTotals(cart);

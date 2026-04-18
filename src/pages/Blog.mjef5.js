@@ -13,18 +13,19 @@ function _setupCategoryFilter() {
     if (!_exists('#categoryRepeater')) return;
 
     $w('#categoryRepeater').onItemReady(($item, itemData) => {
-        try { $item('#categoryButton'); } catch (_e) { return; }
-        $item('#categoryButton').onClick(() => {
-            if (!_exists('#blogPostsDataset')) return;
-            if (!itemData.slug || itemData.slug === 'all') {
-                $w('#blogPostsDataset').setFilter(wixData.filter());
-            } else {
-                $w('#blogPostsDataset').setFilter(
-                    wixData.filter().hasSome('categories', [itemData.slug])
-                );
-            }
-            $w('#blogPostsDataset').loadPage(1);
-        });
+        try {
+            $item('#categoryButton').onClick(() => {
+                if (!_exists('#blogPostsDataset')) return;
+                if (!itemData.slug || itemData.slug === 'all') {
+                    $w('#blogPostsDataset').setFilter(wixData.filter());
+                } else {
+                    $w('#blogPostsDataset').setFilter(
+                        wixData.filter().hasSome('categories', [itemData.slug])
+                    );
+                }
+                $w('#blogPostsDataset').loadPage(1);
+            });
+        } catch (_e) {}
     });
 }
 

@@ -22,14 +22,7 @@ function _loadSideCart() {
 
             if (!_exists('#sideCartRepeater')) return;
 
-            $w('#sideCartRepeater').data = items.map((item) => ({
-                _id: item._id,
-                name: item.name,
-                price: item.price,
-                quantity: item.quantity,
-                image: (item.mediaItem && item.mediaItem.src) || '',
-            }));
-
+            // Register onItemReady BEFORE assigning data so every item is caught
             $w('#sideCartRepeater').onItemReady(($item, itemData) => {
                 try { $item('#sideCartItemName').text = itemData.name; } catch (_e) {}
                 try { $item('#sideCartItemQty').text = `x${itemData.quantity}`; } catch (_e) {}
@@ -47,6 +40,14 @@ function _loadSideCart() {
                     });
                 } catch (_e) {}
             });
+
+            $w('#sideCartRepeater').data = items.map((item) => ({
+                _id: item._id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+                image: (item.mediaItem && item.mediaItem.src) || '',
+            }));
 
             if (_exists('#sideCartSubtotal') && cart.totals) {
                 $w('#sideCartSubtotal').text = formatCurrency(cart.totals.subtotal);

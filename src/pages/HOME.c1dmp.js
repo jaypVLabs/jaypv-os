@@ -1,4 +1,4 @@
-import wixWindow from 'wix-window';
+import wixLocation from 'wix-location';
 
 $w.onReady(function () {
     _animateHero();
@@ -40,12 +40,12 @@ function _setupBrandCards() {
 function _setupCtaButtons() {
     if (_exists('#shopNowButton')) {
         $w('#shopNowButton').onClick(() => {
-            wixWindow.openLightbox('Store').catch(() => {});
+            wixLocation.to('/shop');
         });
     }
     if (_exists('#contactCtaButton')) {
         $w('#contactCtaButton').onClick(() => {
-            wixWindow.openLightbox('Contact').catch(() => {});
+            wixLocation.to('/contact');
         });
     }
 }

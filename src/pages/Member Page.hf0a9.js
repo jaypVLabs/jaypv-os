@@ -60,6 +60,14 @@ async function _loadOrderHistory() {
 
         if (_exists('#noOrdersMessage')) $w('#noOrdersMessage').hide();
 
+        // Register onItemReady BEFORE assigning data so every item is caught
+        $w('#ordersRepeater').onItemReady(($item, itemData) => {
+            try { $item('#orderNumber').text = `#${itemData.number}`; } catch (_e) {}
+            try { $item('#orderDate').text = itemData.date; } catch (_e) {}
+            try { $item('#orderTotal').text = itemData.total; } catch (_e) {}
+            try { $item('#orderStatus').text = itemData.status; } catch (_e) {}
+        });
+
         $w('#ordersRepeater').data = orders.map((order) => ({
             _id: order._id,
             number: order.number || order._id,
@@ -69,13 +77,6 @@ async function _loadOrderHistory() {
             total: order.totals ? `$${order.totals.total.toFixed(2)}` : '',
             status: order.fulfillmentStatus || order.paymentStatus || 'Processing',
         }));
-
-        $w('#ordersRepeater').onItemReady(($item, itemData) => {
-            try { $item('#orderNumber').text = `#${itemData.number}`; } catch (_e) {}
-            try { $item('#orderDate').text = itemData.date; } catch (_e) {}
-            try { $item('#orderTotal').text = itemData.total; } catch (_e) {}
-            try { $item('#orderStatus').text = itemData.status; } catch (_e) {}
-        });
     } catch (_err) {
         if (_exists('#ordersError')) {
             $w('#ordersError').text = 'Could not load order history. Please try again.';
