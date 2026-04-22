@@ -602,12 +602,34 @@ function Invoke-AzureActivation {
             Write-Step "Tenant: $($context.Context.Tenant.Id)" -Status "INFO"
             Write-Step "Subscription: $($context.Context.Subscription.Name)" -Status "INFO"
             
-            # Verify this is the correct account
-            if ($context.Context.Account.Id -eq $AzureConfig.GlobalAdminUPN) {
-                Write-Step "Confirmed: Signed in with Primary Entra ID" -Status "OK"
+            # Verify this is the correct Entra account
+            $signedInAccountId = $context.Context.Account.Id
+            $expectedEntraUpns = @($AzureConfig.GlobalAdminUPN)
+            $primaryUpnParts = $AzureConfig.GlobalAdminUPN -split '@', 2
+            
+            if ($primaryUpnParts.Count -eq 2 -and $PrimaryEntraIdLinkedAccounts) {
+                $expectedEntraUpns += @(
+                    $PrimaryEntraIdLinkedAccounts |
+                        Where-Object {
+                            ($_ -is [string]) -and
+                            ($_ -match '^[^@\s]+@[^@\s]+\.[^@\s]+$') -and
+                            (($_ -split '@', 2)[1] -eq $primaryUpnParts[1])
+                        }
+                )
             }
-            elseif ($context.Context.Account.Id -in $PrimaryEntraIdLinkedAccounts) {
-                Write-Step "Signed in with linked account (same identity)" -Status "OK"
+            
+            if ($signedInAccountId -in $expectedEntraUpns) {
+                if ($signedInAccountId -eq $AzureConfig.GlobalAdminUPN) {
+                    Write-Step "Confirmed: Signed in with Primary Entra ID" -Status "OK"
+                }
+                else {
+                    Write-Step "Signed in with an approved Entra UPN for this tenant" -Status "OK"
+                }
+            }
+            else {
+                Write-Step "Signed in with unexpected Azure account: $signedInAccountId" -Status "ERROR"
+                Write-Step "Expected Entra sign-in: $($AzureConfig.GlobalAdminUPN)" -Status "ERROR"
+                return $false
             }
             
             return $true
