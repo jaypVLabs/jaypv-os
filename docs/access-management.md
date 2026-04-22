@@ -125,7 +125,7 @@ When configuring access for jayhere@jaypventuresllc.com:
 - [x] Git commit email configured (jayhere@jaypventuresllc.com)
 - [ ] Wix site collaborator access
 - [ ] GitHub Actions secrets access (if needed)
-- [ ] Two-factor authentication enabled (recommended)
+- [ ] Two-factor authentication enabled (required for admin access)
 - [ ] SSH key or PAT configured for Git authentication
 - [x] Email credentials rotated (after 2026-04-08 security incident)
 
@@ -133,21 +133,18 @@ When configuring access for jayhere@jaypventuresllc.com:
 
 ### Configuring jayhere@jaypventuresllc.com for Access on Any Device
 
-The jayhere@jaypventuresllc.com account can be configured to work seamlessly across multiple devices without MFA barriers using token-based authentication.
+The jayhere@jaypventuresllc.com account can be configured to work across multiple devices while keeping MFA enabled for interactive sign-in. For Git operations, use a per-device SSH key or fine-grained personal access token (PAT) so authentication remains secure without weakening MFA requirements.
 
 #### Option 1: Personal Access Tokens (Recommended for HTTPS)
 
 **GitHub PAT Setup:**
-1. Navigate to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
-2. Click "Generate new token" → "Generate new token (classic)"
+1. Navigate to GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens
+2. Click "Generate new token"
 3. Provide a descriptive name (e.g., "MacBook Pro 2026", "Windows Desktop", "Linux Laptop")
-4. Select required scopes:
-   - `repo` - Full control of private repositories
-   - `workflow` - Update GitHub Action workflows (if needed)
-   - `admin:org` - Manage organization access (if needed)
-5. Set appropriate expiration (90 days recommended, or "No expiration" for permanent devices)
-6. Generate token and save it securely
-7. Use the PAT as your password when Git prompts for credentials
+4. Limit repository access to only the repositories needed and grant only the minimum permissions required for the intended Git operations
+5. Set a short expiration (for example, 30-90 days) and plan to rotate the token regularly
+6. Generate the token and save it securely in the device credential manager or password manager
+7. Use the PAT as your password when Git prompts for credentials, while keeping MFA enabled on the GitHub account
 
 **Benefits:**
 - Bypasses MFA requirements for Git operations
