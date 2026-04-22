@@ -977,12 +977,27 @@ function Install-WarpClient {
     # Uninstall existing if present
     if (Test-WarpInstalled) {
         Write-Step "Uninstalling existing WARP client..." -Status "ACTION"
-        $uninstallString = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*" | 
+        $uninstallEntry = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*" | 
             Where-Object { $_.DisplayName -like "*Cloudflare WARP*" } | 
-            Select-Object -ExpandProperty UninstallString
+            Select-Object -First 1
+        
+        $uninstallString = $uninstallEntry.UninstallString
         
         if ($uninstallString) {
-            Start-Process "msiexec.exe" -ArgumentList "/x $uninstallString /quiet" -Wait
+            $guidMatch = [regex]::Match($uninstallString, '\{[0-9A-Fa-f-]{36}\}')
+
+            if ($guidMatch.Success) {
+                Start-Process "msiexec.exe" -ArgumentList "/x $($guidMatch.Value) /quiet" -Wait
+            }
+            else {
+                $commandLine = $uninstallString
+                if ($commandLine -notmatch '(^|\s)/(quiet|qn)(\s|$)') {
+                    $commandLine = "$commandLine /quiet"
+                }
+
+                Start-Process "cmd.exe" -ArgumentList "/c $commandLine" -Wait
+            }
+
             Start-Sleep -Seconds 5
         }
     }
