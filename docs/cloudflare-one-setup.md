@@ -74,37 +74,33 @@ When setting up new devices or adding new team members:
 3. Configure the policy settings:
    - **Policy Name:** Descriptive name (e.g., "Allow Team Members April 2026")
    - **Policy Type:** Email-based authentication
-   - **Allowed Emails:** Add approved user emails
+   - **Allowed Emails:** Add users from the internal approved-user roster
 
 ### Approved Users
 
-Current approved users for device enrollment:
+Approved users for device enrollment should be managed by role/category rather than listed individually in this public document.
 
-**Administrators:**
-- `jayhere@jaypventuresllc.com` (Primary - UPN, Founder/CEO)
-- `security@jaypventuresllc.com` (Security team)
-- `venture@jaypventuresllc.com` (Business operations)
-- `support@jaypventuresllc.com` (Technical support)
+**Approved categories:**
+- Organization administrators using approved `@jaypventuresllc.com` accounts
+- Security, operations, and support staff with a documented business need
+- Approved creator accounts authorized by leadership
+- Approved contractor accounts tracked in the internal access roster
 
-**Creators:**
-- `jaypventures@icloud.com` (Creative operations)
-
-**Contractors:**
-- `jasmynp11@gmail.com` (Contract work)
-- `jasmyn.price@email.phoenix.edu` (Educational/contract)
+> **Important:** Keep the specific email roster in a private internal document or password manager. Do not publish individual approved email addresses in this repository.
 
 ### Adding New Users
 
 To add additional approved users:
 
 1. Go to enrollment policy configuration
-2. In the **Add approved user emails** field, enter the email address
-3. Press Tab or Enter to add the email
-4. Click **Continue** to save
+2. Review the internal approved-user roster and confirm the user is authorized
+3. In the **Add approved user emails** field, enter the authorized email address
+4. Press Tab or Enter to add the email
+5. Click **Continue** to save
 
 **Best Practices:**
-- Use work emails when possible
-- Verify email addresses before adding
+- Use work-managed emails when possible
+- Verify authorization against the private access roster before adding
 - Remove users who no longer require access
 - Audit enrollment policies quarterly
 
