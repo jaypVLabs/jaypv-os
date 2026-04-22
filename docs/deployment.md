@@ -87,6 +87,12 @@ Alternatively:
 - Ensure all dependencies are installed with `npm install`
 - Check GitHub Actions for CI failures
 
+**CLI / TTY Issues in CI:**
+- Some Wix CLI commands require an interactive terminal (TTY) and may fail in non-interactive CI environments.
+- This repository's CI workflow runs `npm install` for dependency installation.
+- If a step fails because it requires interactive Wix CLI input, run that command locally instead of in CI.
+- Keep CI steps limited to non-interactive commands such as install, lint, and validation tasks.
+
 **Deployment Issues:**
 - Verify Git Integration is configured in Wix dashboard
 - Check that commits are successfully pushed to main branch
