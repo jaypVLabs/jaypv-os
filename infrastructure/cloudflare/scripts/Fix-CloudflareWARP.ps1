@@ -157,14 +157,63 @@ $AppleEndpoints = @(
 # ============================================
 # AZURE SUBSCRIPTION & TENANT CONFIGURATION
 # ============================================
-# JayPVentures LLC Azure/Entra ID tenant settings
+# Azure/Entra ID tenant settings
+# Load tenant-specific values from a local gitignored JSON file or environment variables.
+# Example local file path: $PSScriptRoot\Fix-CloudflareWARP.local.json
+function Get-ConfigValue {
+    param(
+        [object]$ConfigObject,
+        [string]$PropertyName,
+        [string]$EnvironmentVariableName,
+        $DefaultValue
+    )
+
+    if ($null -ne $ConfigObject) {
+        $property = $ConfigObject.PSObject.Properties[$PropertyName]
+        if ($null -ne $property -and $null -ne $property.Value) {
+            return $property.Value
+        }
+    }
+
+    $envValue = [Environment]::GetEnvironmentVariable($EnvironmentVariableName)
+    if (-not [string]::IsNullOrWhiteSpace($envValue)) {
+        return $envValue
+    }
+
+    return $DefaultValue
+}
+
+$LocalConfigPath = Join-Path -Path $PSScriptRoot -ChildPath "Fix-CloudflareWARP.local.json"
+$LocalConfig = $null
+if (Test-Path -Path $LocalConfigPath) {
+    $LocalConfig = Get-Content -Path $LocalConfigPath -Raw | ConvertFrom-Json
+}
+
+$ApprovedAdminsDefault = @(
+    "admin@example.com"
+)
+
+$ApprovedUsersDefault = @(
+    "user@example.com"
+)
+
+$ApprovedAdminsValue = Get-ConfigValue -ConfigObject $LocalConfig -PropertyName "ApprovedAdmins" -EnvironmentVariableName "CFWARP_APPROVED_ADMINS" -DefaultValue $ApprovedAdminsDefault
+if ($ApprovedAdminsValue -is [string]) {
+    $ApprovedAdminsValue = @($ApprovedAdminsValue -split '\s*,\s*' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+}
+
+$ApprovedUsersValue = Get-ConfigValue -ConfigObject $LocalConfig -PropertyName "ApprovedUsers" -EnvironmentVariableName "CFWARP_APPROVED_USERS" -DefaultValue $ApprovedUsersDefault
+if ($ApprovedUsersValue -is [string]) {
+    $ApprovedUsersValue = @($ApprovedUsersValue -split '\s*,\s*' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+}
+
 $AzureConfig = @{
     # Primary tenant information
-    TenantName = "jaypventuresllc.onmicrosoft.com"
-    PrimaryDomain = "jaypventuresllc.com"
+    TenantName = Get-ConfigValue -ConfigObject $LocalConfig -PropertyName "TenantName" -EnvironmentVariableName "CFWARP_TENANT_NAME" -DefaultValue "tenant.onmicrosoft.com"
+    PrimaryDomain = Get-ConfigValue -ConfigObject $LocalConfig -PropertyName "PrimaryDomain" -EnvironmentVariableName "CFWARP_PRIMARY_DOMAIN" -DefaultValue "example.com"
     
     # Primary Entra ID (Global Admin)
-    GlobalAdminUPN = "jayhere@jaypventuresllc.com"
+    GlobalAdminUPN = Get-ConfigValue -ConfigObject $LocalConfig -PropertyName "GlobalAdminUPN" -EnvironmentVariableName "CFWARP_GLOBAL_ADMIN_UPN" -DefaultValue "admin@example.com"
     
     # Azure management endpoints
     AzureEndpoints = @(
@@ -192,26 +241,10 @@ $AzureConfig = @{
     }
 }
 
-# Approved Entra ID Admin accounts for JayPVentures LLC
-$ApprovedAdmins = @(
-    "jayhere@jaypventuresllc.com",     # PRIMARY ENTRA ID - Global Admin
-    "jaypventuresllc@outlook.com",     # Linked Microsoft Account
-    "jaypventures@icloud.com",         # Linked Apple ID
-    "security@jaypventuresllc.com",    # Security Administrator
-    "venture@jaypventuresllc.com",     # Business Administrator
-    "support@jaypventuresllc.com"      # Technical Administrator
-)
+# Approved Entra ID Admin accounts
+$ApprovedAdmins = @($ApprovedAdminsValue)
 
-$ApprovedUsers = @(
-    "jayhere@jaypventuresllc.com",
-    "jaypventuresllc@outlook.com",
-    "jaypventures@icloud.com",
-    "security@jaypventuresllc.com",
-    "venture@jaypventuresllc.com",
-    "support@jaypventuresllc.com",
-    "jasmynp11@gmail.com",
-    "jasmyn.price@email.phoenix.edu"
-)
+$ApprovedUsers = @($ApprovedUsersValue)
 
 # ============================================
 # CONDITIONAL ACCESS POLICY SETTINGS
