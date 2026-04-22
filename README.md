@@ -115,4 +115,20 @@ Every component is designed to reduce friction, increase clarity, and operate be
 - Edge-based entitlement validation (Cloudflare Workers)
 - Advanced funnel analytics and tracking
 
+---
+
+### Contributing
+
+Want to contribute? Read our [Contributing Guidelines](CONTRIBUTING.md) to get started.
+
+**Key Resources:**
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to this project
+- [Access Management](docs/access-management.md) - Repository access and permissions
+- [Deployment Guide](docs/deployment.md) - How changes are deployed
+- [Security Policy](SECURITY.md) - Security guidelines and reporting
+- [Cloudflare One Setup](docs/cloudflare-one-setup.md) - Zero Trust device enrollment
+- [Cloudflare Security Policies](docs/cloudflare-zero-trust-policies.md) - Network security policies
+
+**Primary Contact:** jayhere@jaypventuresllc.com
+
 
