@@ -12,18 +12,11 @@ This document outlines access control and permissions for the JayPVentures LLC r
 ### Authorized Accounts
 
 #### Primary Technical Contact
-- **Name:** Jasmyn Price
-- **Email:** jayhere@jaypventuresllc.com (Primary UPN)
-- **Alternate Emails:** 
-  - jaypventuresllc@outlook.com
-  - jaypventures@icloud.com
-  - jasmynp11@gmail.com
-  - jasmyn.price@email.phoenix.edu
-- **Phone:** +1 (812) 896-4734, +1 (502) 523-8152
+- **Contact Type:** Role-based repository administration
+- **Email:** jayhere@jaypventuresllc.com
 - **Role:** Founder, CEO, Repository Owner, Code Owner, Technical Lead
 - **GitHub:** @jayhere
 - **Access Level:** Admin
-- **User Object ID:** 5bab4fb7-a52c-421b-cbcd-4cfb0a58edf9
 - **Responsibilities:**
   - Code review and approval
   - Security and access management
@@ -33,7 +26,7 @@ This document outlines access control and permissions for the JayPVentures LLC r
   - Organization ownership
 
 #### Secondary Contact
-- **Email:** jaypventures@icloud.com
+- **Contact Type:** Role-based creative operations
 - **Role:** Organization Owner, Creative Operations
 - **Access Level:** Admin
 - **Group:** Creators
@@ -46,8 +39,7 @@ This document outlines access control and permissions for the JayPVentures LLC r
 - **Group:** Administrators
 
 #### Contractor Accounts
-- **Email:** jasmynp11@gmail.com (Contract work, personal account)
-- **Email:** jasmyn.price@email.phoenix.edu (Educational/training account)
+- **Contact:** Internal/private roster only
 - **Access Level:** Limited (Contractor access)
 - **Group:** Contractors
 
