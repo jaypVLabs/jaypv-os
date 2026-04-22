@@ -377,11 +377,11 @@ function Test-EntraIdConnectivity {
 }
 
 function Test-LinkedAccounts {
-    Write-Header "Linked Account Verification"
+    Write-Header "Alternate Contact Email Review"
     
-    Write-Step "PRIMARY ENTRA ID: $PrimaryEntraId" -Status "INFO"
+    Write-Step "PRIMARY ENTRA ID (use this for Azure/WARP enrollment): $PrimaryEntraId" -Status "INFO"
     Write-Host ""
-    Write-Step "LINKED ACCOUNTS (Same Identity):" -Status "INFO"
+    Write-Step "ALTERNATE CONTACT EMAILS (not assumed to be the same Entra identity):" -Status "INFO"
     
     foreach ($account in $PrimaryEntraIdLinkedAccounts) {
         if ($account -eq $PrimaryEntraId) {
@@ -394,12 +394,13 @@ function Test-LinkedAccounts {
             Write-Step "  $account - Apple ID (iCloud)" -Status "OK"
         }
         else {
-            Write-Step "  $account - Linked Account" -Status "OK"
+            Write-Step "  $account - Alternate Contact Email" -Status "OK"
         }
     }
     
     Write-Host ""
-    Write-Step "All linked accounts should have seamless access without blockers" -Status "INFO"
+    Write-Step "Only the primary Entra ID should be treated as valid for Azure account and WARP enrollment checks" -Status "INFO"
+    Write-Step "Alternate contact emails may help with communication or recovery, but are not assumed to be the same identity" -Status "INFO"
 }
 
 function Test-ConditionalAccessBlockers {
