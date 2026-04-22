@@ -2,26 +2,27 @@
 
 ## Overview
 
-This document maintains the official user directory for JayPVentures LLC, including approved email addresses, roles, and group memberships for system access.
+This document provides a sanitized public reference for JayPVentures LLC email addresses, roles, and group memberships for system access.
 
 **Organization:** JayPVentures LLC  
 **Last Updated:** April 13, 2026  
 **Document Owner:** IT Security Team  
-**Classification:** Internal Use Only
+**Classification:** Public - Sanitized Reference
 
 ---
 
 ## Primary User Identity
 
-### Jasmyn Price - Founder & CEO
+### Executive Leadership Account
 
-**Legal Name:** Jasmyn Price  
+**Public Identifier:** Redacted in public documentation  
 **Primary Role:** Founder, CEO  
-**User Object ID:** 5bab4fb7-a52c-421b-cbcd-4cfb0a58edf9
+**User Object ID:** [redacted - maintained in private identity system]
 
 **Contact Information:**
-- **Primary Phone:** +1 (812) 896-4734
-- **Alternate Phone:** +1 (502) 523-8152
+- **Primary Phone:** [redacted - maintained in private directory]
+- **Alternate Phone:** [redacted - maintained in private directory]
+- **Authoritative Internal Record:** Maintained in the private company directory only
 
 ---
 
