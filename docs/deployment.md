@@ -1,115 +1,117 @@
 # Deployment Guide
 
-This guide covers how code reaches production in this repository, including automatic Git Integration deployment and manual publishing with the Wix CLI.
+This guide covers deployment for the Wix Velo project. Deployment is automated via Wix Git Integration.
 
 ---
 
-## Deployment Methods
+## Deployment Process
 
-This repository supports two deployment workflows:
+**Automated Deployment:**
+- Changes pushed to the `main` branch automatically sync to the live Wix site via Git Integration
+- No manual deployment steps are required
+- The site updates automatically when changes are merged
 
-1. **Automatic deployment via Git Integration** (primary method for production)
-2. **Manual deployment via Wix CLI** (for immediate ad-hoc updates)
-
----
-
-## Method 1: Automatic Deployment (Git Integration)
-
-### How it works
-This repository is configured with **Wix Git Integration**, which automatically syncs code from the **main branch** to the live Wix site. Any commit pushed to main triggers an automatic deployment.
-
-**Workflow:**
-```
-Make changes → Commit → Push to main branch → Wix automatically syncs → Live site updates
-```
-
-### Benefits
-- **Zero-touch deployment**: No manual publish step required
-- **Version control**: All production changes are tracked in Git
-- **Rollback capability**: Revert to any previous commit and push to deploy
-
-### To deploy using Git Integration:
-1. Ensure your changes are committed to a feature branch
-2. Create a pull request to merge into `main`
-3. Review and merge the PR
-4. Wix automatically deploys the changes to the live site
-
-**Important:** All code merged to `main` goes live automatically. Always test thoroughly before merging.
+**CI/CD Pipeline:**
+- GitHub Actions runs linting and validation on pull requests
+- CI checks ensure code quality before merging
+- After merge to main, Wix Git Integration handles deployment automatically
 
 ---
 
-## Method 2: Manual Deployment (Wix CLI)
-
-Use this method when you need to deploy changes immediately without going through the Git workflow.
-
-### Prerequisites
-- Node.js (v14.8 or later)
-- npm or yarn
-- Wix CLI (`npm install -g @wix/cli`)
-- Access to the connected Wix site
-- Required environment variables in `.env` (see `.env.example`)
+## Prerequisites
+- Access to the Wix site (for manual operations if needed)
+- Git access to the repository
+- Node.js (v20 or later) for local development
+- Wix CLI for local testing: `npm install -g @wix/cli`
 
 ---
 
-### 1. Authenticate with Wix CLI
+## Local Development & Testing
 
-```bash
-wix login
-```
-- Follow the browser prompt to authenticate with your Wix account.
-- Ensure you have access to the correct site.
-
----
-
-### 2. Set Up Environment
-- Copy `.env.example` to `.env` and fill in all required values.
-- Never commit `.env` to the repository.
-
----
-
-### 3. Local Build & Test
+Before pushing changes, always test locally:
 
 ```bash
 npm install
 npm run lint
 npm run dev
 ```
-- Confirm the site runs locally and passes linting before publishing.
+
+This ensures your code passes quality checks and runs correctly.
 
 ---
 
-### 4. Publish to Wix
+## Manual Publishing (If Needed)
 
+In rare cases where manual deployment is required:
+
+1. Authenticate with Wix CLI:
+```bash
+wix login
+```
+
+2. Publish manually:
 ```bash
 wix publish
 ```
-- This will build and deploy your site to the connected Wix environment.
-- Follow any prompts for environment or site selection.
+
+**Note:** This is rarely needed since Git Integration handles deployment automatically.
+
+---
+
+## Environment Configuration
+
+- Copy `.env.example` to `.env` and configure as needed
+- Environment variables are used for local testing and load testing
+- Never commit `.env` to the repository (it's gitignored)
 
 ---
 
 ## Rollback / Revert
 
-### For Git Integration deployments
-1. Identify the last known good commit: `git log --oneline`
-2. Revert the problematic commit: `git revert <commit-hash>`
-3. Push to main: `git push origin main`
-4. Wix automatically deploys the reverted state
+To rollback a deployment:
+1. Revert the problematic commit in Git
+2. Push to main branch
+3. Git Integration will automatically deploy the reverted state
 
-### For manual Wix CLI deployments
-1. Checkout the previous working commit: `git checkout <commit-hash>`
-2. Re-run `wix publish` to redeploy the previous state
+Alternatively:
+- Use Git provider UI to revert commits
+- Create a new PR with the revert
+- Merge to trigger automatic deployment
 
 ---
 
 ## Troubleshooting
-- Ensure all environment variables are set.
-- If authentication fails, re-run `wix login`.
-- For build errors, check lint output and dependency versions.
+
+**Build Issues:**
+- Run `npm run lint` to check for code quality issues
+- Ensure all dependencies are installed with `npm install`
+- Check GitHub Actions for CI failures
+
+**CLI / TTY Issues in CI:**
+- Some Wix CLI commands require an interactive terminal (TTY) and may fail in non-interactive CI environments.
+- This repository's CI workflow runs `npm install` for dependency installation.
+- If a step fails because it requires interactive Wix CLI input, run that command locally instead of in CI.
+- Keep CI steps limited to non-interactive commands such as install, lint, and validation tasks.
+
+**Deployment Issues:**
+- Verify Git Integration is configured in Wix dashboard
+- Check that commits are successfully pushed to main branch
+- Review Wix site logs for deployment errors
 
 ---
 
-## Notes
-- Only publish from a clean, tested state.
-- For production, double-check all secrets and API keys are correct in `.env`.
-- For more, see [Wix CLI documentation](https://support.wix.com/en/article/velo-working-with-the-wix-cli-beta).
+## Load Testing
+
+Before deploying major changes, run load tests:
+
+```bash
+pip install -r load-testing/requirements.txt
+npm run test:load
+```
+
+---
+
+## References
+
+- [Wix CLI documentation](https://support.wix.com/en/article/velo-working-with-the-wix-cli-beta)
+- [Wix Git Integration](https://support.wix.com/en/article/velo-about-git-integration-beta)

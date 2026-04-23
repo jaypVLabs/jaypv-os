@@ -1,0 +1,35 @@
+{
+  "split_tunnel": {
+    "mode": "exclude",
+    "tunnels": [
+      {
+        "address": "10.0.0.0/8",
+        "description": "Private network - Class A"
+      },
+      {
+        "address": "172.16.0.0/12",
+        "description": "Private network - Class B"
+      },
+      {
+        "address": "192.168.0.0/16",
+        "description": "Private network - Class C"
+      },
+      {
+        "address": "169.254.0.0/16",
+        "description": "Link-local addresses"
+      },
+      {
+        "address": "224.0.0.0/4",
+        "description": "Multicast"
+      }
+    ],
+    "exclude_domains": []
+  },
+  "local_domain_fallback": [
+    {
+      "domain": "jaypventuresllc.local",
+      "description": "Internal domain resolution"
+    }
+  ],
+  "notes": "Split tunnel configuration - excludes private network ranges from WARP tunnel"
+}

@@ -11,3 +11,21 @@ __pycache__/
 dist/
 build/
 *.log
+
+# temporary/testing files
+*.tmp
+*.temp
+directory-list.txt
+
+# security - never commit credentials
+*password*
+*credentials*
+*secret*.py
+import*.py
+
+# cloudflare - never commit actual configurations
+infrastructure/cloudflare/*-policy.json
+infrastructure/cloudflare/*-policies.json
+infrastructure/cloudflare/split-tunnel.json
+!infrastructure/cloudflare/*.example.json
+!infrastructure/cloudflare/README.md

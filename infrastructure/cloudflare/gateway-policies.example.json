@@ -1,0 +1,104 @@
+{
+  "name": "JayPVentures LLC Gateway Policies",
+  "description": "Cloudflare Gateway policies for network security",
+  "policies": [
+    {
+      "name": "Block Malware and Phishing",
+      "precedence": 1,
+      "enabled": true,
+      "action": "block",
+      "filters": [
+        "Security Risks",
+        "Malware",
+        "Phishing",
+        "Command and Control & Botnet"
+      ],
+      "description": "Block known malicious domains and security threats"
+    },
+    {
+      "name": "Block Risky File Types",
+      "precedence": 2,
+      "enabled": true,
+      "action": "block",
+      "traffic": "http",
+      "file_types": [
+        "exe",
+        "msi",
+        "dmg",
+        "pkg",
+        "deb",
+        "rpm"
+      ],
+      "description": "Block executable file downloads from untrusted sources"
+    },
+    {
+      "name": "DNS Security Categories",
+      "precedence": 3,
+      "enabled": true,
+      "action": "block",
+      "dns_categories": [
+        "Malware",
+        "Phishing",
+        "Command and Control & Botnet",
+        "Cryptomining",
+        "Newly Seen Domains"
+      ],
+      "description": "Block DNS queries to malicious and suspicious domains"
+    },
+    {
+      "name": "Block Anonymous Proxies",
+      "precedence": 4,
+      "enabled": true,
+      "action": "block",
+      "filters": [
+        "VPN and Anonymizers"
+      ],
+      "description": "Prevent use of VPNs and proxy services"
+    },
+    {
+      "name": "Allow Business Applications",
+      "precedence": 5,
+      "enabled": true,
+      "action": "allow",
+      "applications": [
+        "GitHub",
+        "Google Workspace",
+        "Microsoft 365",
+        "Stripe",
+        "Wix",
+        "Cloudflare",
+        "Slack",
+        "Zoom"
+      ],
+      "description": "Explicitly allow critical business applications"
+    },
+    {
+      "name": "Log All Traffic",
+      "precedence": 99,
+      "enabled": true,
+      "action": "allow",
+      "traffic": "all",
+      "log_all": true,
+      "description": "Default allow with logging for visibility"
+    }
+  ],
+  "global_settings": {
+    "tls_inspection": {
+      "enabled": true,
+      "exclude_applications": [
+        "Banking and Finance",
+        "Health and Fitness"
+      ]
+    },
+    "antivirus_scanning": {
+      "enabled": true,
+      "scan_downloads": true,
+      "scan_uploads": false
+    },
+    "browser_isolation": {
+      "enabled": false,
+      "isolate_risky_sites": false
+    }
+  },
+  "notes": "Example configuration file - Do not commit actual production policies or sensitive settings"
+}

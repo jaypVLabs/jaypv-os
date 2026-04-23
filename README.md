@@ -15,9 +15,9 @@ This repo provides:
 2. `npm run lint` — check code quality
 3. `npm run dev` — start local Wix dev server
 4. `pip install -r load-testing/requirements.txt` — install Python test deps
-5. `locust -f load-testing/locustfile.py` — run load tests
+5. `npm run test:load` — run load tests
 
-**Deployment:** See [docs/deployment.md](docs/deployment.md) for full instructions.
+**Deployment:** Changes pushed to `main` branch automatically sync to the live Wix site via Git Integration. See [docs/deployment.md](docs/deployment.md) for details.
 
 **Stack:** Wix Velo (React 16), Node.js, ESLint, Python (Locust)
 
@@ -80,7 +80,7 @@ npm run dev
 **Python (Load Testing)**
 ```bash
 pip install -r load-testing/requirements.txt
-locust -f load-testing/locustfile.py
+npm run test:load
 ```
 
 ---
@@ -97,11 +97,11 @@ Sensitive values (API keys, tokens, secrets) are never stored in this repository
 ---
 
 ### Deployment
-Deployment is handled through the Wix CLI and platform publishing workflow.
+Deployment is automated via Wix Git Integration. Changes pushed to the `main` branch automatically sync to the live Wix site. No manual deployment steps are required.
 
 - **Production deployments:** Automatic via Git Integration (push to `main` branch)
 - **Manual deployments:** Use `wix publish` command for immediate updates
-- **CI pipeline:** GitHub Actions validates changes with preview builds
+- **CI pipeline:** GitHub Actions validates changes with linting and dependency checks
 
 For complete details, see:
 - [docs/deployment.md](docs/deployment.md) - Deployment workflows and rollback procedures
@@ -122,5 +122,21 @@ Every component is designed to reduce friction, increase clarity, and operate be
 - Discord role-based access systems
 - Edge-based entitlement validation (Cloudflare Workers)
 - Advanced funnel analytics and tracking
+
+---
+
+### Contributing
+
+Want to contribute? Read our [Contributing Guidelines](CONTRIBUTING.md) to get started.
+
+**Key Resources:**
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to this project
+- [Access Management](docs/access-management.md) - Repository access and permissions
+- [Deployment Guide](docs/deployment.md) - How changes are deployed
+- [Security Policy](SECURITY.md) - Security guidelines and reporting
+- [Cloudflare One Setup](docs/cloudflare-one-setup.md) - Zero Trust device enrollment
+- [Cloudflare Security Policies](docs/cloudflare-zero-trust-policies.md) - Network security policies
+
+**Primary Contact:** jayhere@jaypventuresllc.com
 
 
