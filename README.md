@@ -99,6 +99,14 @@ Sensitive values (API keys, tokens, secrets) are never stored in this repository
 ### Deployment
 Deployment is automated via Wix Git Integration. Changes pushed to the `main` branch automatically sync to the live Wix site. No manual deployment steps are required.
 
+- **Production deployments:** Automatic via Git Integration (push to `main` branch)
+- **Manual deployments:** Use `wix publish` command for immediate updates
+- **CI pipeline:** GitHub Actions validates changes with linting and dependency checks
+
+For complete details, see:
+- [docs/deployment.md](docs/deployment.md) - Deployment workflows and rollback procedures
+- [docs/ci-pipeline.md](docs/ci-pipeline.md) - CI pipeline configuration and troubleshooting
+
 ---
 
 ### Philosophy
