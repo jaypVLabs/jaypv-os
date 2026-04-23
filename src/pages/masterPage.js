@@ -1,23 +1,20 @@
 import wixUsers from 'wix-users';
 import wixStores from 'wix-stores';
+import { exists } from 'public/utils';
 
 $w.onReady(function () {
+    // Bind logout handler exactly once to avoid duplicate calls on re-sync
+    if (exists('#logoutButton')) {
+        $w('#logoutButton').onClick(() => {
+            wixUsers.logout().then(() => {
+                _syncUserState();
+            });
+        });
+    }
+
     _syncUserState();
     _syncCartBadge();
 });
-
-/**
- * Returns true if the element selector resolves to a real page element.
- * In Wix Velo, $w() always returns a selector object; check .type to confirm
- * that the element actually exists on the current page.
- */
-function _exists(selector) {
-    try {
-        return Boolean($w(selector).type);
-    } catch (_e) {
-        return false;
-    }
-}
 
 /**
  * Show/hide login vs. account nav items based on the current member session.
@@ -26,23 +23,14 @@ function _exists(selector) {
 function _syncUserState() {
     const loggedIn = wixUsers.currentUser.loggedIn;
 
-    if (_exists('#loginButton')) {
+    if (exists('#loginButton')) {
         loggedIn ? $w('#loginButton').hide() : $w('#loginButton').show();
     }
-    if (_exists('#accountButton')) {
+    if (exists('#accountButton')) {
         loggedIn ? $w('#accountButton').show() : $w('#accountButton').hide();
     }
-    if (_exists('#logoutButton')) {
-        if (loggedIn) {
-            $w('#logoutButton').show();
-            $w('#logoutButton').onClick(() => {
-                wixUsers.logout().then(() => {
-                    _syncUserState();
-                });
-            });
-        } else {
-            $w('#logoutButton').hide();
-        }
+    if (exists('#logoutButton')) {
+        loggedIn ? $w('#logoutButton').show() : $w('#logoutButton').hide();
     }
 }
 
@@ -51,7 +39,7 @@ function _syncUserState() {
  * Expects an optional text element #cartBadge.
  */
 function _syncCartBadge() {
-    if (!_exists('#cartBadge')) {
+    if (!exists('#cartBadge')) {
         return;
     }
 

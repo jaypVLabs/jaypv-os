@@ -44,7 +44,8 @@
 - **Backend `.jsw` files** are Wix web modules; export async functions that can be called from any page file using `import { fn } from 'backend/moduleName'`.
 - **`public/` files** are shared utilities importable as `import { fn } from 'public/fileName'`.
 - **`postinstall` runs `wix sync-types`** — always use `--ignore-scripts` in CI and pass `WIX_AUTH_TOKEN` for the preview step.
-- **Permissions**: `src/backend/permissions.json` now has explicit per-function rules. Review before launch — ensure sensitive functions remain restricted to appropriate roles.
+- **Permissions**: `src/backend/permissions.json` has been tightened from the earlier wildcard-open setup. Keep permissions least-privilege as backend methods evolve — sensitive member/order functions should remain restricted to the minimum required roles (`siteOwner` or `siteMember`). `createMember` is restricted to `siteOwner` only (no anonymous or member re-registration). Review permissions before each launch cycle.
+- **Contact email notifications**: `src/backend/contact.jsw` captures leads in the Wix CRM. To also send a triggered email notification to the site owner, create a Triggered Email template in the Wix Dashboard (Dashboard → Automations → Triggered Emails) and set the `CONTACT_NOTIFICATION_EMAIL_ID` constant in `contact.jsw`.
 
 ---
 

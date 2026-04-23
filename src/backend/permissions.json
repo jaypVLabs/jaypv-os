@@ -18,7 +18,7 @@
       "createMember": {
         "siteOwner": { "invoke": true },
         "siteMember": { "invoke": false },
-        "anonymous": { "invoke": true }
+        "anonymous": { "invoke": false }
       }
     },
     "backend/orders.jsw": {
