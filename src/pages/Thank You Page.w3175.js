@@ -28,7 +28,7 @@ function _displayOrderConfirmation() {
 }
 
 /**
- * Navigate back to the home page or shop when the continue button is clicked.
+ * Navigate back to the home page when the continue button is clicked.
  */
 function _setupContinueButton() {
     if (!_exists('#continueShoppingButton')) return;
