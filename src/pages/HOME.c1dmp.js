@@ -113,7 +113,7 @@ function setHtml(ids, value) {
     }
 
     if (typeof element.text !== 'undefined') {
-        element.text = value.replace(/<[^>]*>/g, '');
+        element.text = value.replace(/<[\s\S]*?>/g, '');
         return true;
     }
 
