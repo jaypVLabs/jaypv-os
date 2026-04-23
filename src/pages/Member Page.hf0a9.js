@@ -70,10 +70,14 @@ async function _loadOrderHistory() {
         }));
 
         $w('#ordersRepeater').onItemReady(($item, itemData) => {
-            if (_exists('#orderNumber')) $item('#orderNumber').text = `#${itemData.number}`;
-            if (_exists('#orderDate')) $item('#orderDate').text = itemData.date;
-            if (_exists('#orderTotal')) $item('#orderTotal').text = itemData.total;
-            if (_exists('#orderStatus')) $item('#orderStatus').text = itemData.status;
+            const itemExists = (selector) => {
+                try { return Boolean($item(selector).type); } catch (_e) { return false; }
+            };
+
+            if (itemExists('#orderNumber')) $item('#orderNumber').text = `#${itemData.number}`;
+            if (itemExists('#orderDate')) $item('#orderDate').text = itemData.date;
+            if (itemExists('#orderTotal')) $item('#orderTotal').text = itemData.total;
+            if (itemExists('#orderStatus')) $item('#orderStatus').text = itemData.status;
         });
     } catch (_err) {
         if (_exists('#ordersError')) {

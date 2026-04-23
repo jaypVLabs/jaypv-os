@@ -8,9 +8,7 @@ $w.onReady(function () {
 
         const name    = $w('#nameInput').value.trim();
         const email   = $w('#emailInput').value.trim();
-        const subject = $w('#subjectInput') && $w('#subjectInput').value
-            ? $w('#subjectInput').value.trim()
-            : '';
+        const subject = _exists('#subjectInput') ? $w('#subjectInput').value.trim() : '';
         const message = $w('#messageInput').value.trim();
 
         // Validation
@@ -39,3 +37,14 @@ $w.onReady(function () {
         }
     });
 });
+
+/**
+ * Returns true if an element with the given selector exists on the current page.
+ */
+function _exists(selector) {
+    try {
+        return Boolean($w(selector).type);
+    } catch (_e) {
+        return false;
+    }
+}

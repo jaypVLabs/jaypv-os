@@ -14,8 +14,9 @@ function _setupFilters() {
     if (!_exists('#filterRepeater')) return;
 
     $w('#filterRepeater').onItemReady(($item, itemData) => {
-        if (!_exists('#filterButton')) return;
-        $item('#filterButton').onClick(() => {
+        const filterButton = (() => { try { return $item('#filterButton'); } catch (_e) { return null; } })();
+        if (!filterButton) return;
+        filterButton.onClick(() => {
             if (!_exists('#productsDataset')) return;
             if (itemData.value === 'all') {
                 $w('#productsDataset').setFilter(wixData.filter());

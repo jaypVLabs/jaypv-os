@@ -13,8 +13,9 @@ function _setupCategoryFilter() {
     if (!_exists('#categoryRepeater')) return;
 
     $w('#categoryRepeater').onItemReady(($item, itemData) => {
-        if (!_exists('#categoryButton')) return;
-        $item('#categoryButton').onClick(() => {
+        const categoryButton = (() => { try { return $item('#categoryButton'); } catch (_e) { return null; } })();
+        if (!categoryButton) return;
+        categoryButton.onClick(() => {
             if (!_exists('#blogPostsDataset')) return;
             if (!itemData.slug || itemData.slug === 'all') {
                 $w('#blogPostsDataset').setFilter(wixData.filter());

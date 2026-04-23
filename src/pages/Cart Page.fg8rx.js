@@ -36,18 +36,22 @@ function _loadCart() {
                 }));
 
                 $w('#cartRepeater').onItemReady(($item, itemData) => {
-                    if (_exists('#itemName')) $item('#itemName').text = itemData.name;
-                    if (_exists('#itemPrice')) $item('#itemPrice').text = formatCurrency(itemData.price);
-                    if (_exists('#itemQuantity')) $item('#itemQuantity').value = String(itemData.quantity);
-                    if (_exists('#itemImage') && itemData.image) {
+                    const itemExists = (selector) => {
+                        try { return Boolean($item(selector).type); } catch (_e) { return false; }
+                    };
+
+                    if (itemExists('#itemName')) $item('#itemName').text = itemData.name;
+                    if (itemExists('#itemPrice')) $item('#itemPrice').text = formatCurrency(itemData.price);
+                    if (itemExists('#itemQuantity')) $item('#itemQuantity').value = String(itemData.quantity);
+                    if (itemExists('#itemImage') && itemData.image) {
                         $item('#itemImage').src = itemData.image;
                     }
 
-                    if (_exists('#removeItemButton')) {
+                    if (itemExists('#removeItemButton')) {
                         $item('#removeItemButton').onClick(() => _removeItem(itemData._id));
                     }
 
-                    if (_exists('#itemQuantity')) {
+                    if (itemExists('#itemQuantity')) {
                         $item('#itemQuantity').onChange((event) => {
                             const qty = parseInt(event.target.value, 10);
                             if (qty > 0) _updateQuantity(itemData._id, qty);

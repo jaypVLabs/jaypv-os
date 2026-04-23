@@ -4,7 +4,15 @@
 import wixCrm from 'wix-crm-backend';
 
 /**
- * Sends a contact form submission to the site owner.
+ * ID of the Wix triggered email template used to acknowledge the submission.
+ * Create the template in Wix Dashboard → Automations → Triggered Emails,
+ * then replace this value with the email ID shown there.
+ */
+const CONTACT_ACK_EMAIL_ID = 'contact-acknowledgement';
+
+/**
+ * Captures a contact form submission in the Wix CRM and sends the
+ * submitter an acknowledgement email via a Wix triggered email template.
  *
  * @param {object} options
  * @param {string} options.name     Sender's full name
@@ -20,9 +28,25 @@ export async function sendContactEmail({ name, email, subject, message }) {
 
     // Create or update a contact so the lead is captured in the CRM
     const nameParts = name.split(' ');
-    await wixCrm.createContact({
+    const contact = await wixCrm.createContact({
         name: { first: nameParts[0], last: nameParts.slice(1).join(' ') || '' },
         emails: [{ tag: 'main', email }],
         notes: `Subject: ${subject || '(no subject)'}\n\n${message}`,
     });
+
+    // Send an acknowledgement email back to the submitter.
+    // Failure here is non-fatal: the lead has already been captured in the CRM.
+    if (contact && contact.contactId) {
+        try {
+            await wixCrm.emailContact(CONTACT_ACK_EMAIL_ID, contact.contactId, {
+                variables: {
+                    senderName: name,
+                    subject: subject || '(no subject)',
+                    message,
+                },
+            });
+        } catch (emailErr) {
+            console.error('[contact] Acknowledgement email failed:', emailErr);
+        }
+    }
 }

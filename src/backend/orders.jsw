@@ -1,15 +1,24 @@
 // Backend web module: member order history
 // Import with: import { getMemberOrders } from 'backend/orders'
 
+import { currentUser } from 'wix-users-backend';
 import wixStoresBackend from 'wix-stores-backend';
 
 /**
  * Retrieves the order history for the currently logged-in member.
+ * Throws if the caller is not authenticated.
  *
- * @returns {Promise<Array>} List of order objects
+ * @returns {Promise<Array>} List of order objects belonging to the calling member
  */
 export async function getMemberOrders() {
+    if (!currentUser.loggedIn) {
+        throw new Error('Authentication required');
+    }
+
+    const memberId = currentUser.id;
+
     const results = await wixStoresBackend.orders.queryOrders()
+        .eq('buyerInfo.memberId', memberId)
         .limit(20)
         .descending('_createdDate')
         .find();

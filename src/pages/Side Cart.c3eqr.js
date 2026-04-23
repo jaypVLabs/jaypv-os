@@ -31,17 +31,21 @@ function _loadSideCart() {
             }));
 
             $w('#sideCartRepeater').onItemReady(($item, itemData) => {
-                if (_exists('#sideCartItemName')) $item('#sideCartItemName').text = itemData.name;
-                if (_exists('#sideCartItemQty')) {
+                const itemExists = (selector) => {
+                    try { return Boolean($item(selector).type); } catch (_e) { return false; }
+                };
+
+                if (itemExists('#sideCartItemName')) $item('#sideCartItemName').text = itemData.name;
+                if (itemExists('#sideCartItemQty')) {
                     $item('#sideCartItemQty').text = `x${itemData.quantity}`;
                 }
-                if (_exists('#sideCartItemPrice')) {
+                if (itemExists('#sideCartItemPrice')) {
                     $item('#sideCartItemPrice').text = formatCurrency(itemData.price * itemData.quantity);
                 }
-                if (_exists('#sideCartItemImage') && itemData.image) {
+                if (itemExists('#sideCartItemImage') && itemData.image) {
                     $item('#sideCartItemImage').src = itemData.image;
                 }
-                if (_exists('#sideCartRemoveButton')) {
+                if (itemExists('#sideCartRemoveButton')) {
                     $item('#sideCartRemoveButton').onClick(() => {
                         wixStores.cart.removeItem(itemData._id)
                             .then(() => _loadSideCart())
