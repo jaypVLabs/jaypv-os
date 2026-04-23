@@ -1,0 +1,57 @@
+// Backend web module: contact form lead capture + email notification
+// Import with: import { sendContactEmail } from 'backend/contact'
+
+import wixCrm from 'wix-crm-backend';
+import triggeredEmail from 'wix-triggered-email';
+
+/**
+ * ID of the Triggered Email template configured in the Wix Dashboard
+ * (Dashboard → Automations → Triggered Emails).
+ * Set this to the App ID of your "New Contact Form Submission" email template.
+ * Leave as null to skip the email notification and only capture the CRM lead.
+ *
+ * @type {string|null}
+ */
+const CONTACT_NOTIFICATION_EMAIL_ID = null; // e.g. 'abcd1234-ef56-...'
+
+/**
+ * Captures a contact form submission in the Wix CRM and, when a triggered
+ * email template has been configured, sends a notification email to the
+ * site owner.
+ *
+ * @param {object} options
+ * @param {string} options.name     Sender's full name
+ * @param {string} options.email    Sender's email address
+ * @param {string} options.subject  Message subject (optional)
+ * @param {string} options.message  Message body
+ * @returns {Promise<void>}
+ */
+export async function sendContactEmail({ name, email, subject, message }) {
+    if (!name || !email || !message) {
+        throw new Error('Missing required fields: name, email, message');
+    }
+
+    // Create or update a contact so the lead is captured in the CRM
+    const nameParts = name.split(' ');
+    const contact = await wixCrm.createContact({
+        name: { first: nameParts[0], last: nameParts.slice(1).join(' ') || '' },
+        emails: [{ tag: 'main', email }],
+        notes: `Subject: ${subject || '(no subject)'}\n\n${message}`,
+    });
+
+    // Send a triggered email notification if a template ID is configured
+    if (CONTACT_NOTIFICATION_EMAIL_ID && contact && contact._id) {
+        await triggeredEmail.emailContact(
+            CONTACT_NOTIFICATION_EMAIL_ID,
+            contact._id,
+            {
+                variables: {
+                    senderName: name,
+                    senderEmail: email,
+                    subject: subject || '(no subject)',
+                    message,
+                },
+            }
+        );
+    }
+}

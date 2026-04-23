@@ -1,10 +1,40 @@
-// API Reference: https://www.wix.com/velo/reference/api-overview/introduction
-// “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+import { sendContactEmail } from 'backend/contact';
+import { exists } from 'public/utils';
 
 $w.onReady(function () {
-    // Write your JavaScript here
+    $w('#submitButton').onClick(async () => {
+        // Clear previous feedback
+        $w('#errorText').text = '';
+        $w('#successText').text = '';
 
-    // To select an element by ID use: $w('#elementID')
+        const name    = $w('#nameInput').value.trim();
+        const email   = $w('#emailInput').value.trim();
+        const subject = exists('#subjectInput') ? $w('#subjectInput').value.trim() : '';
+        const message = $w('#messageInput').value.trim();
 
-    // Click 'Preview' to run your code
+        // Validation
+        if (!name || !email || !message) {
+            $w('#errorText').text = 'Please fill in your name, email, and message.';
+            return;
+        }
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+            $w('#errorText').text = 'Please enter a valid email address.';
+            return;
+        }
+
+        // Disable button while sending
+        $w('#submitButton').label = 'Sending…';
+        $w('#submitButton').disable();
+
+        try {
+            await sendContactEmail({ name, email, subject, message });
+            $w('#successText').text = "Thank you! We'll be in touch shortly.";
+            $w('#contactForm').reset();
+        } catch (_err) {
+            $w('#errorText').text = 'Something went wrong. Please try again or email us directly.';
+        } finally {
+            $w('#submitButton').label = 'Send Message';
+            $w('#submitButton').enable();
+        }
+    });
 });
