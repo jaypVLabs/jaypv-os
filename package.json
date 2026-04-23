@@ -10,6 +10,7 @@
     "test:load": "locust -f load-testing/locustfile.py"
   },
   "devDependencies": {
+    "@wix/cli": "^1.1.178",
     "@wix/eslint-plugin-cli": "^1.0.0",
     "eslint": "^8.25.0"
   },
