@@ -21,13 +21,18 @@ export function exists(selector) {
 
 /**
  * Validate that a string is a well-formed email address.
+ * Rejects consecutive dots, leading/trailing dots in the local part,
+ * and domains without a valid TLD.
  *
  * @param {string} email
  * @returns {boolean}
  */
 export function isValidEmail(email) {
     if (!email || typeof email !== 'string') return false;
-    return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+    // Must have exactly one @, no consecutive dots, no leading/trailing dots
+    // in either part, and a TLD of at least 2 characters.
+    return /^[a-zA-Z0-9]([a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/.test(email)
+        && !/\.\./.test(email);
 }
 
 /**

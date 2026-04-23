@@ -19,10 +19,13 @@ function _setupBrandFilter() {
                 const sel = `#${b}Card`;
                 if (_exists(sel)) $w(sel).show();
             });
-            brands.filter((b) => b !== brand).forEach((b) => {
-                const sel = `#${b}Card`;
-                if (_exists(sel)) $w(sel).hide('fade', { duration: 200 });
-            });
+            // If a specific brand is selected, hide the others
+            if (brand !== 'all') {
+                brands.filter((b) => b !== brand).forEach((b) => {
+                    const sel = `#${b}Card`;
+                    if (_exists(sel)) $w(sel).hide('fade', { duration: 200 });
+                });
+            }
         });
     });
 

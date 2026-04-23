@@ -21,13 +21,14 @@ function _displayOrderConfirmation() {
             'Your order has been received. You will receive an email confirmation shortly.';
     }
 
+    // Show the confirmation section with a brief animation
     if (_exists('#confirmationSection')) {
         $w('#confirmationSection').show('fade', { duration: 600 });
     }
 }
 
 /**
- * Navigate back to the home page when the continue button is clicked.
+ * Navigate back to the home page or shop when the continue button is clicked.
  */
 function _setupContinueButton() {
     if (!_exists('#continueShoppingButton')) return;

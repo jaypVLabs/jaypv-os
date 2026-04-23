@@ -2,6 +2,28 @@ import wixStores from 'wix-stores';
 import { formatCurrency } from 'public/utils';
 
 $w.onReady(function () {
+    // Register onItemReady ONCE here so repeated _loadSideCart() calls
+    // (triggered by remove actions) do not stack duplicate handlers.
+    if (_exists('#sideCartRepeater')) {
+        $w('#sideCartRepeater').onItemReady(($item, itemData) => {
+            try { $item('#sideCartItemName').text = itemData.name; } catch (_e) {}
+            try { $item('#sideCartItemQty').text = `x${itemData.quantity}`; } catch (_e) {}
+            try {
+                $item('#sideCartItemPrice').text = formatCurrency(itemData.price * itemData.quantity);
+            } catch (_e) {}
+            try {
+                if (itemData.image) $item('#sideCartItemImage').src = itemData.image;
+            } catch (_e) {}
+            try {
+                $item('#sideCartRemoveButton').onClick(() => {
+                    wixStores.cart.removeItem(itemData._id)
+                        .then(() => _loadSideCart())
+                        .catch(() => {});
+                });
+            } catch (_e) {}
+        });
+    }
+
     _loadSideCart();
     _setupCloseButton();
 });
@@ -29,30 +51,6 @@ function _loadSideCart() {
                 quantity: item.quantity,
                 image: (item.mediaItem && item.mediaItem.src) || '',
             }));
-
-            $w('#sideCartRepeater').onItemReady(($item, itemData) => {
-                const itemExists = (selector) => {
-                    try { return Boolean($item(selector).type); } catch (_e) { return false; }
-                };
-
-                if (itemExists('#sideCartItemName')) $item('#sideCartItemName').text = itemData.name;
-                if (itemExists('#sideCartItemQty')) {
-                    $item('#sideCartItemQty').text = `x${itemData.quantity}`;
-                }
-                if (itemExists('#sideCartItemPrice')) {
-                    $item('#sideCartItemPrice').text = formatCurrency(itemData.price * itemData.quantity);
-                }
-                if (itemExists('#sideCartItemImage') && itemData.image) {
-                    $item('#sideCartItemImage').src = itemData.image;
-                }
-                if (itemExists('#sideCartRemoveButton')) {
-                    $item('#sideCartRemoveButton').onClick(() => {
-                        wixStores.cart.removeItem(itemData._id)
-                            .then(() => _loadSideCart())
-                            .catch(() => {});
-                    });
-                }
-            });
 
             if (_exists('#sideCartSubtotal') && cart.totals) {
                 $w('#sideCartSubtotal').text = formatCurrency(cart.totals.subtotal);

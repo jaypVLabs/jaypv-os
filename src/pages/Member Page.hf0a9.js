@@ -33,6 +33,7 @@ async function _loadMemberProfile() {
             $w('#memberEmailText').text = email;
         }
 
+        // Pre-fill the edit form if it exists
         if (_exists('#editFirstName') && contact.firstName) {
             $w('#editFirstName').value = contact.firstName;
         }
@@ -60,6 +61,14 @@ async function _loadOrderHistory() {
 
         if (_exists('#noOrdersMessage')) $w('#noOrdersMessage').hide();
 
+        // Register onItemReady BEFORE assigning data so every item is caught
+        $w('#ordersRepeater').onItemReady(($item, itemData) => {
+            try { $item('#orderNumber').text = `#${itemData.number}`; } catch (_e) {}
+            try { $item('#orderDate').text = itemData.date; } catch (_e) {}
+            try { $item('#orderTotal').text = itemData.total; } catch (_e) {}
+            try { $item('#orderStatus').text = itemData.status; } catch (_e) {}
+        });
+
         $w('#ordersRepeater').data = orders.map((order) => ({
             _id: order._id,
             number: order.number || order._id,
@@ -69,17 +78,6 @@ async function _loadOrderHistory() {
             total: order.totals ? `$${order.totals.total.toFixed(2)}` : '',
             status: order.fulfillmentStatus || order.paymentStatus || 'Processing',
         }));
-
-        $w('#ordersRepeater').onItemReady(($item, itemData) => {
-            const itemExists = (selector) => {
-                try { return Boolean($item(selector).type); } catch (_e) { return false; }
-            };
-
-            if (itemExists('#orderNumber')) $item('#orderNumber').text = `#${itemData.number}`;
-            if (itemExists('#orderDate')) $item('#orderDate').text = itemData.date;
-            if (itemExists('#orderTotal')) $item('#orderTotal').text = itemData.total;
-            if (itemExists('#orderStatus')) $item('#orderStatus').text = itemData.status;
-        });
     } catch (_err) {
         if (_exists('#ordersError')) {
             $w('#ordersError').text = 'Could not load order history. Please try again.';
@@ -111,6 +109,7 @@ function _setupProfileEdit() {
                 $w('#profileSaveSuccess').show();
             }
 
+            // Refresh displayed name
             if (_exists('#memberNameText')) {
                 $w('#memberNameText').text = [firstName, lastName].filter(Boolean).join(' ') || 'Member';
             }

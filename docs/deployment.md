@@ -11,7 +11,7 @@ This guide covers deployment for the Wix Velo project. Deployment is automated v
 - No manual deployment steps are required
 - The site updates automatically when changes are merged
 
-**CI/CD Pipeline:**
+**CI Pipeline:**
 - GitHub Actions runs linting and validation on pull requests
 - CI checks ensure code quality before merging
 - After merge to main, Wix Git Integration handles deployment automatically

@@ -25,6 +25,9 @@ function _initProduct() {
                 label: c.value,
                 value: c.value,
             }));
+            if (colorOption.choices.length > 0) {
+                $w('#variantDropdown').value = colorOption.choices[0].value;
+            }
         }
     }
 }
@@ -69,8 +72,18 @@ function _setupAddToCart() {
             return;
         }
 
+        // Build options from variant dropdown if present
+        const options = {};
+        if (_exists('#variantDropdown') && product.productOptions) {
+            const colorOption = product.productOptions.find(o => o.name.toLowerCase() === 'color');
+            if (colorOption) {
+                const selectedValue = $w('#variantDropdown').value;
+                if (selectedValue) options[colorOption.name] = selectedValue;
+            }
+        }
+
         try {
-            await wixStores.cart.addToCart(product._id, quantity);
+            await wixStores.cart.addToCart(product._id, quantity, { choices: options });
             $w('#addToCartButton').label = 'Added!';
             setTimeout(() => {
                 $w('#addToCartButton').label = 'Add to Cart';

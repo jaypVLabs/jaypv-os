@@ -73,7 +73,7 @@ const ELEMENTS = {
 function getElement(id) {
     try {
         return $w(`#${id}`);
-    } catch (error) {
+    } catch (_e) {
         return null;
     }
 }
@@ -148,7 +148,7 @@ function logMissing(name, updated) {
 }
 
 /**
- * Fade-in the hero section elements on page load with a staggered delay.
+ * Fade-in and slide-up the hero section elements on page load.
  */
 function _animateHero() {
     const heroTargets = ['#heroTitle', '#heroSubtitle', '#heroCtaButton'];
@@ -173,6 +173,20 @@ function _animateBrandCards() {
             $w(selector).show('fade', { duration: 500, delay: i * 100 });
         }, 600 + i * 100);
     });
+}
+
+/**
+ * Wire up any extra CTA buttons not covered by the ELEMENTS map.
+ */
+function _setupExtraCtaButtons() {
+    const shopNow = getElement('shopNowButton');
+    if (shopNow && typeof shopNow.onClick === 'function') {
+        shopNow.onClick(() => wixLocation.to('/shop'));
+    }
+    const contactCta = getElement('contactCtaButton');
+    if (contactCta && typeof contactCta.onClick === 'function') {
+        contactCta.onClick(() => wixLocation.to('/contact'));
+    }
 }
 
 $w.onReady(function () {
@@ -207,7 +221,8 @@ $w.onReady(function () {
     logMissing('philosophyTitle', setText(ELEMENTS.philosophyTitle, HOME_CONTENT.philosophyTitle));
     logMissing('philosophyBody', setText(ELEMENTS.philosophyBody, HOME_CONTENT.philosophyBody));
 
-    // Animate hero and brand cards
+    // Animate hero and brand cards, wire extra CTAs
     _animateHero();
     _animateBrandCards();
+    _setupExtraCtaButtons();
 });

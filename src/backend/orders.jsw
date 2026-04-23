@@ -6,9 +6,9 @@ import wixStoresBackend from 'wix-stores-backend';
 
 /**
  * Retrieves the order history for the currently logged-in member.
- * Throws if the caller is not authenticated.
+ * Filtered by the caller's member ID so no other customer's orders are exposed.
  *
- * @returns {Promise<Array>} List of order objects belonging to the calling member
+ * @returns {Promise<Array>} List of order objects belonging to the caller
  */
 export async function getMemberOrders() {
     if (!currentUser.loggedIn) {
@@ -16,6 +16,7 @@ export async function getMemberOrders() {
     }
 
     const memberId = currentUser.id;
+    if (!memberId) return [];
 
     const results = await wixStoresBackend.orders.queryOrders()
         .eq('buyerInfo.memberId', memberId)

@@ -1,4 +1,4 @@
-// Backend web module: contact form email dispatch
+// Backend web module: contact form lead capture + acknowledgement email
 // Import with: import { sendContactEmail } from 'backend/contact'
 
 import wixCrm from 'wix-crm-backend';
@@ -17,7 +17,7 @@ const CONTACT_ACK_EMAIL_ID = 'contact-acknowledgement';
  * @param {object} options
  * @param {string} options.name     Sender's full name
  * @param {string} options.email    Sender's email address
- * @param {string} options.subject  Message subject
+ * @param {string} options.subject  Message subject (optional)
  * @param {string} options.message  Message body
  * @returns {Promise<void>}
  */
@@ -41,6 +41,7 @@ export async function sendContactEmail({ name, email, subject, message }) {
             await wixCrm.emailContact(CONTACT_ACK_EMAIL_ID, contact.contactId, {
                 variables: {
                     senderName: name,
+                    senderEmail: email,
                     subject: subject || '(no subject)',
                     message,
                 },

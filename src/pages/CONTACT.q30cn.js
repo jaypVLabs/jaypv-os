@@ -1,4 +1,5 @@
 import { sendContactEmail } from 'backend/contact';
+import { exists } from 'public/utils';
 
 $w.onReady(function () {
     $w('#submitButton').onClick(async () => {
@@ -8,7 +9,7 @@ $w.onReady(function () {
 
         const name    = $w('#nameInput').value.trim();
         const email   = $w('#emailInput').value.trim();
-        const subject = _exists('#subjectInput') ? $w('#subjectInput').value.trim() : '';
+        const subject = exists('#subjectInput') ? $w('#subjectInput').value.trim() : '';
         const message = $w('#messageInput').value.trim();
 
         // Validation
@@ -29,10 +30,10 @@ $w.onReady(function () {
             await sendContactEmail({ name, email, subject, message });
             $w('#successText').text = "Thank you! We'll be in touch shortly.";
             // Clear each field individually — Wix Velo has no form.reset() method
-            if (_exists('#nameInput'))    $w('#nameInput').value = '';
-            if (_exists('#emailInput'))   $w('#emailInput').value = '';
-            if (_exists('#messageInput')) $w('#messageInput').value = '';
-            if (_exists('#subjectInput')) $w('#subjectInput').value = '';
+            if (exists('#nameInput'))    $w('#nameInput').value = '';
+            if (exists('#emailInput'))   $w('#emailInput').value = '';
+            if (exists('#messageInput')) $w('#messageInput').value = '';
+            if (exists('#subjectInput')) $w('#subjectInput').value = '';
         } catch (_err) {
             $w('#errorText').text = 'Something went wrong. Please try again or email us directly.';
         } finally {
@@ -41,14 +42,3 @@ $w.onReady(function () {
         }
     });
 });
-
-/**
- * Returns true if an element with the given selector exists on the current page.
- */
-function _exists(selector) {
-    try {
-        return Boolean($w(selector).type);
-    } catch (_e) {
-        return false;
-    }
-}

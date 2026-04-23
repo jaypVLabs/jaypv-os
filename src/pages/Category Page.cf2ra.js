@@ -9,23 +9,24 @@ $w.onReady(function () {
 
 /**
  * Wire up filter buttons to toggle visibility of items in the product gallery.
+ * The gallery dataset is expected to have a filterByField method.
  */
 function _setupFilters() {
     if (!_exists('#filterRepeater')) return;
 
     $w('#filterRepeater').onItemReady(($item, itemData) => {
-        const filterButton = (() => { try { return $item('#filterButton'); } catch (_e) { return null; } })();
-        if (!filterButton) return;
-        filterButton.onClick(() => {
-            if (!_exists('#productsDataset')) return;
-            if (itemData.value === 'all') {
-                $w('#productsDataset').setFilter(wixData.filter());
-            } else {
-                $w('#productsDataset').setFilter(
-                    wixData.filter().eq('category', itemData.value)
-                );
-            }
-        });
+        try {
+            $item('#filterButton').onClick(() => {
+                if (!_exists('#productsDataset')) return;
+                if (itemData.value === 'all') {
+                    $w('#productsDataset').setFilter(wixData.filter());
+                } else {
+                    $w('#productsDataset').setFilter(
+                        wixData.filter().eq('category', itemData.value)
+                    );
+                }
+            });
+        } catch (_e) {}
     });
 }
 
@@ -57,7 +58,7 @@ function _setupBreadcrumbs() {
     const category = path[path.length - 1] || '';
     const displayName = category
         .split('-')
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 
     $w('#breadcrumbText').text = `Home > Shop${displayName ? ' > ' + displayName : ''}`;
