@@ -22,7 +22,7 @@ This guide covers deployment for the Wix Velo project. Deployment is automated v
 - Access to the Wix site (for manual operations if needed)
 - Git access to the repository
 - Node.js (v20 or later) for local development
-- Wix CLI for local testing: `npm install -g @wix/cli`
+- Wix CLI is included as a dev dependency (`@wix/cli`)
 
 ---
 
@@ -46,12 +46,12 @@ In rare cases where manual deployment is required:
 
 1. Authenticate with Wix CLI:
 ```bash
-wix login
+npx wix login
 ```
 
 2. Publish manually:
 ```bash
-wix publish
+npx wix publish
 ```
 
 **Note:** This is rarely needed since Git Integration handles deployment automatically.

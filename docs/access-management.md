@@ -192,10 +192,23 @@ gh auth login
 
 #### Wix CLI Multi-Device Setup
 
-For each device, authenticate separately:
+The Wix CLI is installed locally as a dev dependency in this project. For each device, authenticate separately:
 
 ```bash
-# Install Wix CLI globally
+# Install Node.js dependencies (includes @wix/cli)
+npm install
+
+# Authenticate on device
+npx wix login
+
+# Verify authentication
+npx wix whoami
+```
+
+Alternatively, you can install Wix CLI globally:
+
+```bash
+# Install Wix CLI globally (optional)
 npm install -g @wix/cli
 
 # Authenticate on device
@@ -320,10 +333,10 @@ See [SECURITY.md](../SECURITY.md) for vulnerability reporting procedures.
 4. Verify Git email matches authorized account
 
 ### Cannot Access Wix CLI
-1. Run `wix login` to authenticate
+1. Run `npx wix login` to authenticate (or `wix login` if installed globally)
 2. Verify Wix account has site access
 3. Check network connectivity
-4. Ensure @wix/cli is installed: `npm install -g @wix/cli`
+4. Ensure @wix/cli is installed: `npm install` (or `npm install -g @wix/cli` for global install)
 
 ### Cannot View CI/CD Secrets
 - Only repository admins can view secrets
