@@ -28,7 +28,11 @@ $w.onReady(function () {
         try {
             await sendContactEmail({ name, email, subject, message });
             $w('#successText').text = "Thank you! We'll be in touch shortly.";
-            $w('#contactForm').reset();
+            // Clear each field individually — Wix Velo has no form.reset() method
+            if (_exists('#nameInput'))    $w('#nameInput').value = '';
+            if (_exists('#emailInput'))   $w('#emailInput').value = '';
+            if (_exists('#messageInput')) $w('#messageInput').value = '';
+            if (_exists('#subjectInput')) $w('#subjectInput').value = '';
         } catch (_err) {
             $w('#errorText').text = 'Something went wrong. Please try again or email us directly.';
         } finally {

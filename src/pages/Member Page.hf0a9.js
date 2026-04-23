@@ -1,5 +1,6 @@
 import wixUsers from 'wix-users';
 import wixLocation from 'wix-location';
+import { currentMember } from 'wix-members';
 import { getMemberOrders } from 'backend/orders';
 
 $w.onReady(async function () {
@@ -101,7 +102,7 @@ function _setupProfileEdit() {
             const firstName = _exists('#editFirstName') ? $w('#editFirstName').value.trim() : '';
             const lastName  = _exists('#editLastName')  ? $w('#editLastName').value.trim()  : '';
 
-            await wixUsers.currentUser.updateMember({
+            await currentMember.updateCurrentMember({
                 contactDetails: { firstName, lastName },
             });
 
