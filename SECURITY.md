@@ -81,3 +81,97 @@ Do NOT:
 Security is not a feature — it is a foundational layer of every system we build.
 
 JayPVentures LLC designs infrastructure to be resilient, scalable, and protected by default.
+
+---
+
+## Security Best Practices
+
+### Never Commit Secrets
+- **Never** commit passwords, API keys, tokens, or other sensitive credentials to the repository
+- Use environment variables (`.env`) for all sensitive configuration
+- The `.env` file is gitignored and should never be committed
+- Review `.env.example` for the expected structure without actual secrets
+
+### Code Review
+- All code changes should be reviewed before merging
+- Pay special attention to files that handle authentication, authorization, or sensitive data
+- Automated security scanning runs on all pull requests
+
+### Dependency Management
+- Keep dependencies up to date
+- Review security advisories for dependencies regularly
+- Use `npm audit` to check for known vulnerabilities
+
+### Multi-Device Access Configuration
+
+#### Account: jayhere@jaypventuresllc.com
+
+To enable access on any device regardless of MFA status:
+
+**GitHub Access:**
+- Use Personal Access Tokens (PAT) with appropriate scopes instead of password authentication
+- Generate device-specific PATs from GitHub Settings → Developer settings → Personal access tokens
+- PATs bypass MFA requirements for Git operations and API access
+- Set appropriate expiration dates and revoke tokens when devices are no longer in use
+
+**Git Authentication Methods:**
+1. **HTTPS with PAT:** Use PAT as password when prompted
+2. **SSH Keys:** Generate device-specific SSH keys and add to GitHub account
+3. **GitHub CLI:** Run `gh auth login` and follow authentication flow
+
+**Wix CLI Access:**
+- Run `wix login` on each device to authenticate
+- Authentication tokens are stored locally per device
+- No MFA required after initial login flow
+
+**Best Practices for Multi-Device Access:**
+- Generate separate credentials (PATs, SSH keys) for each device
+- Use descriptive names to identify which device each credential belongs to
+- Regularly audit and revoke credentials for devices no longer in use
+- Store credentials securely using OS keychain/credential managers
+- Never share credentials across devices or users
+
+**Security Note:** While MFA can be bypassed using PATs and SSH keys for automation and multi-device workflows, these methods maintain security through token-based authentication and can be individually revoked if compromised
+
+### Cloudflare Zero Trust Access
+
+For network-level security and device management, JayPVentures LLC uses Cloudflare One (Zero Trust):
+
+**Device Enrollment:**
+- Requires approved email address for enrollment
+- See [Cloudflare One Setup Guide](docs/cloudflare-one-setup.md) for detailed enrollment instructions
+- Current approved users managed through enrollment policies
+
+**Network Security:**
+- All traffic routed through Cloudflare Gateway
+- DNS filtering and malware protection
+- Zero Trust access policies for internal applications
+- See [Cloudflare Zero Trust Policies](docs/cloudflare-zero-trust-policies.md) for policy details
+
+**Documentation:**
+- [Cloudflare One Setup Guide](docs/cloudflare-one-setup.md) - Complete setup and enrollment process
+- [Cloudflare Zero Trust Policies](docs/cloudflare-zero-trust-policies.md) - Security policies and governance
+- [Infrastructure Configuration](infrastructure/cloudflare/README.md) - Configuration files and API usage
+
+---
+
+## Security Incident Response
+
+If a security incident occurs (such as accidental credential exposure):
+
+1. **Immediately revoke** any exposed credentials
+2. **Rotate** affected passwords, API keys, or tokens
+3. **Review** commit history to identify when the exposure occurred
+4. **Notify** affected parties if user data was compromised
+5. **Document** the incident and response actions taken
+6. **Update** security practices to prevent recurrence
+
+---
+
+## Recent Security Actions
+
+### 2026-04-08: Repository Cleanup
+- Removed file containing hardcoded email credentials (`import smtplib.py`)
+- Updated `.gitignore` to prevent future credential commits
+- Cleaned up repository structure and removed junk files
+- **Action Required:** If you had access to the exposed credentials (email password for jayhere@jaypventuresllc.com), they should be considered compromised and must be rotated immediately

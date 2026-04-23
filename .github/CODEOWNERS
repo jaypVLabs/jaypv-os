@@ -1,0 +1,24 @@
+# Code Owners for JayPVentures LLC
+# These owners will be requested for review when someone opens a pull request.
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+# Unless a later match takes precedence, these will be requested for review
+* @jayhere
+
+# Backend code and permissions
+/src/backend/ @jayhere
+
+# CI/CD workflows
+/.github/workflows/ @jayhere
+
+# Security-related files
+/SECURITY.md @jayhere
+/.env.example @jayhere
+
+# Documentation
+/docs/ @jayhere
+
+# Configuration files
+*.json @jayhere
+*.config.* @jayhere

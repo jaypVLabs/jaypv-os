@@ -1,2 +1,1 @@
-locust
-python-dotenv
+# This file is intentionally left blank. Python dependencies are managed in load-testing/requirements.txt.

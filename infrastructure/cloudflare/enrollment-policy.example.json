@@ -1,0 +1,43 @@
+{
+  "name": "JayPVentures LLC Device Enrollment Policy",
+  "description": "Email-based enrollment policy for approved users by group (Admins, Creators, Contractors)",
+  "precedence": 1,
+  "require": [
+    {
+      "email": {
+        "email": [
+          "jayhere@jaypventuresllc.com",
+          "security@jaypventuresllc.com",
+          "venture@jaypventuresllc.com",
+          "support@jaypventuresllc.com",
+          "jaypventures@icloud.com",
+          "jasmynp11@gmail.com",
+          "jasmyn.price@email.phoenix.edu"
+        ]
+      }
+    }
+  ],
+  "include": [
+    {
+      "any_valid_service_token": {}
+    }
+  ],
+  "exclude": [],
+  "enabled": true,
+  "service_mode": "warp",
+  "auto_register": false,
+  "schedule": {
+    "enabled": false
+  },
+  "support_url": "mailto:security@jaypventuresllc.com",
+  "policy_settings": {
+    "allow_mode_switch": true,
+    "allow_updates": true,
+    "auto_connect": 1,
+    "captive_portal": 180,
+    "disable_auto_fallback": false,
+    "support_url": "mailto:security@jaypventuresllc.com",
+    "switch_locked": false
+  },
+  "notes": "Created: April 2026 - This is an example configuration file. Do not commit actual credentials or sensitive configuration."
+}
