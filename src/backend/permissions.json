@@ -3,7 +3,7 @@
     "*": {
       "*": {
         "siteOwner": { "invoke": true },
-        "siteMember": { "invoke": true },
+        "siteMember": { "invoke": false },
         "anonymous": { "invoke": false }
       }
     },
@@ -18,7 +18,7 @@
       "createMember": {
         "siteOwner": { "invoke": true },
         "siteMember": { "invoke": false },
-        "anonymous": { "invoke": false }
+        "anonymous": { "invoke": true }
       }
     },
     "backend/orders.jsw": {

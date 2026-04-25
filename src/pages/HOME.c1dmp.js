@@ -52,8 +52,10 @@ const ELEMENTS = {
     heroSubtitle: ['heroSubtitle', 'homeHeroSubtitle', 'textHeroSubtitle', 'heroBody', 'subheadingHero'],
     trustLine: ['trustLine', 'textTrustLine', 'homeTrustLine', 'heroTrustText'],
 
-    primaryCta: ['primaryCtaButton', 'heroPrimaryButton', 'buttonPrimary', 'bookCallButton', 'ctaPrimary'],
+    primaryCta: ['primaryCtaButton', 'heroPrimaryButton', 'buttonPrimary', 'bookCallButton', 'ctaPrimary', 'heroCtaButton'],
     secondaryCta: ['secondaryCtaButton', 'heroSecondaryButton', 'buttonSecondary', 'servicesButton', 'ctaSecondary'],
+    shopNow: ['shopNowButton'],
+    contactCta: ['contactCtaButton'],
 
     sectionOneTitle: ['sectionOneTitle', 'servicesIntroTitle', 'overviewTitle', 'homeSection1Title'],
     sectionOneBody: ['sectionOneBody', 'servicesIntroBody', 'overviewBody', 'homeSection1Body'],
@@ -111,7 +113,7 @@ function setHtml(ids, value) {
     }
 
     if (typeof element.text !== 'undefined') {
-        element.text = value.replace(/<[^>]*>/g, '');
+        element.text = value.replace(/<[\s\S]*?>/g, '');
         return true;
     }
 
@@ -203,6 +205,9 @@ $w.onReady(function () {
         'secondaryCta',
         wireButton(ELEMENTS.secondaryCta, HOME_CONTENT.secondaryCtaLabel, HOME_CONTENT.secondaryCtaLink)
     );
+
+    wireButton(ELEMENTS.shopNow, 'Shop Now', '/shop');
+    wireButton(ELEMENTS.contactCta, 'Contact Us', '/contact');
 
     logMissing('sectionOneTitle', setText(ELEMENTS.sectionOneTitle, HOME_CONTENT.sectionOneTitle));
     logMissing('sectionOneBody', setText(ELEMENTS.sectionOneBody, HOME_CONTENT.sectionOneBody));

@@ -46,7 +46,7 @@ function _syncCartBadge() {
     wixStores.getCart()
         .then((cart) => {
             const count = (cart.lineItems || []).reduce(
-                (sum, item) => sum + item.quantity,
+                (sum, item) => sum + (Number(item.quantity) || 0),
                 0
             );
             $w('#cartBadge').text = count > 0 ? String(count) : '';

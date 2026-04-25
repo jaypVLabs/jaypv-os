@@ -1,23 +1,18 @@
-// Backend web module: contact form lead capture + email notification
+// Backend web module: contact form lead capture + acknowledgement email
 // Import with: import { sendContactEmail } from 'backend/contact'
 
 import wixCrm from 'wix-crm-backend';
-import triggeredEmail from 'wix-triggered-email';
 
 /**
- * ID of the Triggered Email template configured in the Wix Dashboard
- * (Dashboard → Automations → Triggered Emails).
- * Set this to the App ID of your "New Contact Form Submission" email template.
- * Leave as null to skip the email notification and only capture the CRM lead.
- *
- * @type {string|null}
+ * ID of the Wix triggered email template used to acknowledge the submission.
+ * Create the template in Wix Dashboard → Automations → Triggered Emails,
+ * then replace this value with the email ID shown there.
  */
-const CONTACT_NOTIFICATION_EMAIL_ID = null; // e.g. 'abcd1234-ef56-...'
+const CONTACT_ACK_EMAIL_ID = 'contact-acknowledgement';
 
 /**
- * Captures a contact form submission in the Wix CRM and, when a triggered
- * email template has been configured, sends a notification email to the
- * site owner.
+ * Captures a contact form submission in the Wix CRM and sends the
+ * submitter an acknowledgement email via a Wix triggered email template.
  *
  * @param {object} options
  * @param {string} options.name     Sender's full name
@@ -39,19 +34,20 @@ export async function sendContactEmail({ name, email, subject, message }) {
         notes: `Subject: ${subject || '(no subject)'}\n\n${message}`,
     });
 
-    // Send a triggered email notification if a template ID is configured
-    if (CONTACT_NOTIFICATION_EMAIL_ID && contact && contact._id) {
-        await triggeredEmail.emailContact(
-            CONTACT_NOTIFICATION_EMAIL_ID,
-            contact._id,
-            {
+    // Send an acknowledgement email back to the submitter.
+    // Failure here is non-fatal: the lead has already been captured in the CRM.
+    if (contact && contact.contactId) {
+        try {
+            await wixCrm.emailContact(CONTACT_ACK_EMAIL_ID, contact.contactId, {
                 variables: {
                     senderName: name,
                     senderEmail: email,
                     subject: subject || '(no subject)',
                     message,
                 },
-            }
-        );
+            });
+        } catch (emailErr) {
+            console.error('[contact] Acknowledgement email failed:', emailErr);
+        }
     }
 }
