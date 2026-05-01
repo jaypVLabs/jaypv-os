@@ -1,6 +1,5 @@
-name = "api"
+name = "jayventures-labs"
 main = "src/index.js"
 compatibility_date = "2026-04-30"
-account_id = "<your_account_id>"
-route = "https://api.jaypventuresllc.com/*"
-workers_dev = false
+account_id = "b7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7" # Example: replace with your actual account ID if different
+workers_dev = true
