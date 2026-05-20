@@ -1,5 +1,5 @@
-name = "jayventures-labs"
+name = "jaypventuresllc-com"
 main = "src/index.js"
 compatibility_date = "2026-04-30"
-account_id = "b7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7" # Example: replace with your actual account ID if different
+account_id = "b2952ef3fa8dd99b6084f66a456ee9b9"
 workers_dev = true
