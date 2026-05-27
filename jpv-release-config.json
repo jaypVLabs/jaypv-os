@@ -1,0 +1,18 @@
+{
+  "project": "JPV-OS",
+  "release_gate": true,
+  "canonical_routes": [
+    "/",
+    "/ecosystem/",
+    "/access/",
+    "/pricing/",
+    "/founder/",
+    "/contact/",
+    "/privacy/",
+    "/terms/",
+    "/refunds/"
+  ],
+  "non_canonical_blocked": [
+    "/refund"
+  ]
+}
