@@ -14,6 +14,8 @@ __pycache__/
 **/.wrangler/
 .dev.vars
 **/.dev.vars
+.wrangler
+.dev.vars*
 
 # Editors / OS
 .vscode/
@@ -21,8 +23,9 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Local test artifacts
-*.local
+# Wix (local tooling)
+.wix/
+
 # Next.js build output
 .next/
 
@@ -32,10 +35,11 @@ Thumbs.db
 # OpenNext
 .open-next
 
-# wrangler files
-.wrangler
-.dev.vars*
-!.dev.vars.example
-
+# Environment files
 .env*
 !.env.example
+
+# Local test artifacts (access gateway tooling)
+*.csv
+preview-*.js
+*.local
