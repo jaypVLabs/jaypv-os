@@ -1,0 +1,97 @@
+{
+  "typeAcquisition": {
+    "enable": true
+  },
+  "references": [
+    {
+      "path": ".wix\\types\\alu59\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\c1dmp\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\cachf\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\cf2ra\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\cukwa\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\dl5aa\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\fg8rx\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\ga0vb\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\gln42\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\h2qkt\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\hf0a9\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\mjef5\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\nf72q\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\o6uws\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\p072h\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\q30cn\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\st6st\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\v9pi1\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\vm8jl\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\w3175\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\w3w96\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\xey1f\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\xjvor\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\xkrp6\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\zyklq\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\c3eqr\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\cxxzb\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\masterPage\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\backend\\jsconfig.json"
+    },
+    {
+      "path": ".wix\\types\\public\\jsconfig.json"
+    }
+  ]
+}
