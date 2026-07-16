@@ -13,9 +13,14 @@ permissions:
   contents: read
 
 jobs:
-  verify-production-build:
-    name: Verify JPV-OS Production Build
-    runs-on: ubuntu-latest
+  verify-trusted-production-build:
+    name: Verify Trusted JPV-OS Production Build
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, Windows, X64, jpv-os]
+
+    defaults:
+      run:
+        shell: pwsh
 
     steps:
       - name: Checkout repository
@@ -38,9 +43,34 @@ jobs:
 
       - name: Verify production health endpoint
         run: |
-          STATUS=$(curl -s -o /tmp/health.json -w "%{http_code}" https://jaypv-os.jaypventuresllc.com/health.json)
-          cat /tmp/health.json
-          if [ "$STATUS" != "200" ]; then
-            echo "Health check failed with status $STATUS"
-            exit 1
-          fi
+          $Response = Invoke-WebRequest -Uri "https://jaypv-os.jaypventuresllc.com/health.json" -UseBasicParsing
+          $Response.Content
+          if ($Response.StatusCode -ne 200) {
+            throw "Health check failed with status $($Response.StatusCode)"
+          }
+
+  verify-untrusted-fork:
+    name: Verify Untrusted Fork
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository without credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js
+        run: npm run build
+
+      - name: Build OpenNext Cloudflare bundle
+        run: npx opennextjs-cloudflare build
