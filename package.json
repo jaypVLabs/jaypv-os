@@ -26,7 +26,7 @@
     "verify:live": "node scripts/verify-live.mjs"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260710.1",
+    "@cloudflare/workers-types": "^5.20260718.1",
     "@eslint/js": "^9.39.4",
     "@opennextjs/cloudflare": "^1.19.8",
     "@types/js-yaml": "^4.0.9",
