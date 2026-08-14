@@ -1,12 +1,16 @@
 {
-  "schemaVersion": "1.1",
+  "schemaVersion": "1.2",
   "authorityRepository": "jaypVLabs/JPV-OS",
   "authorityRef": "main",
+  "surfaceRole": "BOUNDED_COMPATIBILITY",
+  "localAuthoritativeGovernanceAllowed": false,
   "requiredStandards": [
     "governance/GOVERNING-INTENT-EQUILIBRIUM-STANDARD.md",
     "governance/SYSTEM-CONSISTENCY-INTEGRITY-STANDARD.md",
     "governance/ARTIFACT-CONTEXT-CURATION-STANDARD.md",
-    "governance/standards/INVESTIGATIVE-EVIDENCE-PIPELINE-INVARIANT.md"
+    "governance/standards/INVESTIGATIVE-EVIDENCE-PIPELINE-INVARIANT.md",
+    "governance/inherited/cost-integrity-invariant.json",
+    ".jpv/governance/detection-attribution-evidence-invariant.json"
   ],
   "requiredContracts": [
     "governance/contracts/governing-intent-equilibrium.v1.json",
@@ -26,7 +30,13 @@
     "entityResolutionPrecedesAssociation": true,
     "inferenceMustRemainDistinctFromFact": true,
     "uncertainOrHighMaterialityRequiresReview": true,
-    "investigativeRecordsAreAppendOnly": true
+    "investigativeRecordsAreAppendOnly": true,
+    "materialCostMustRemainLegible": true,
+    "avoidableCostExternalizationForbidden": true,
+    "detectionDistinctFromAttribution": true,
+    "unknownCauseIsValidState": true,
+    "unsupportedMotiveIntentCoordinationCausationForbidden": true,
+    "githubActionsExecutionSurfaceAllowed": false
   },
   "enforcement": "fail_closed"
 }
