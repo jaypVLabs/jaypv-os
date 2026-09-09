@@ -1,58 +1,15 @@
 {
+  "name": "jaypv-os-retired",
+  "private": true,
   "scripts": {
-    "build": "next build --webpack",
-    "jpv:enforce": "node ./scripts/jpv-enforce.mjs",
-    "jpv:enforce:test": "node ./scripts/jpv-enforce.mjs --test",
-    "enforce:brand": "ts-node operations/jpv_os_enforcement/cli.ts jaypventures_llc --file",
-    "dev": "next dev",
-    "build:site": "next build",
-    "build:worker": "npx wrangler deploy --dry-run --outdir /tmp/worker-build --config wix/bookings/wrangler.toml --env production",
-    "deploy": "opennextjs-cloudflare deploy",
-    "start": "next start",
-    "lint": "eslint apps/ components/ operations/ pages/ tests/ --ext .ts,.tsx,.js,.jsx,.mdx",
-    "test": "vitest",
-    "typecheck": "tsc --noEmit",
-    "deploy:dryrun:bookings": "npx wrangler deploy --dry-run --outdir /tmp/worker-build --config wix/bookings/wrangler.toml --env production",
-    "deploy:dryrun:entitlement": "npx wrangler deploy --dry-run --outdir /tmp/entitlement-build --config operations/entitlement-system/wrangler.toml",
-    "deploy:dryrun:website": "npx wrangler deploy --dry-run --outdir /tmp/website-build --config apps/flagship-site/wrangler.toml",
-    "validate:deploy:bookings": "node scripts/validate-deploy-config.mjs wix/bookings/wrangler.toml",
-    "validate:deploy:entitlement": "node scripts/validate-deploy-config.mjs operations/entitlement-system/wrangler.toml",
-    "validate:deploy:website": "node scripts/validate-deploy-config.mjs apps/flagship-site/wrangler.toml",
-    "governance:freeze-check": "node scripts/governance/check-deployment-freeze.mjs",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
-    "cfbuild": "opennextjs-cloudflare build",
-    "verify:live": "node scripts/verify-live.mjs"
+    "build": "node -e \"console.error('repository-retired: use jaypVLabs/JPV-OS'); process.exit(2)\"",
+    "dev": "node -e \"console.error('repository-retired: use jaypVLabs/JPV-OS'); process.exit(2)\"",
+    "test": "node --test tests/repository-retirement.test.mjs",
+    "typecheck": "node -e \"console.log('repository-retired: no active runtime typecheck')\"",
+    "jpv:enforce": "node -e \"console.error('repository-retired: use jaypVLabs/JPV-OS'); process.exit(2)\"",
+    "jpv:enforce:test": "node --test tests/repository-retirement.test.mjs"
   },
-  "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260718.1",
-    "@eslint/js": "^9.39.4",
-    "@opennextjs/cloudflare": "^1.19.8",
-    "@types/js-yaml": "^4.0.9",
-    "@types/node": "^26.1.1",
-    "@types/react": "19.2.14",
-    "@typescript-eslint/eslint-plugin": "^8.67.0",
-    "@typescript-eslint/parser": "^8.67.0",
-    "@vitest/coverage-istanbul": "^4.1.5",
-    "@vitest/ui": "^4.1.5",
-    "eslint": "^10.8.1",
-    "eslint-plugin-react": "^7.37.5",
-    "js-yaml": "^5.2.3",
-    "ts-node": "^10.9.2",
-    "typescript": "^7.0.2",
-    "vitest": "^4.1.5",
-    "wrangler": "^4.123.0"
-  },
-  "dependencies": {
-    "hono": "^4.12.34",
-    "next": "^16.3.0",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "webpack": "^5.109.2"
-  },
-  "overrides": {
-    "postcss": "^8.5.10"
-  },
-  "name": "jaypv-os"
+  "engines": {
+    "node": ">=22.12.0"
+  }
 }
