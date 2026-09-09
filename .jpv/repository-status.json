@@ -1,0 +1,12 @@
+{
+  "schema_version": "jpv.repository-status.v1",
+  "repository": "jaypVLabs/jaypv-os",
+  "lifecycle": "RETIRED",
+  "authority": false,
+  "deployable": false,
+  "canonical_repository": "jaypVLabs/JPV-OS",
+  "retired_at": "2026-09-08",
+  "reason": "Duplicate lowercase JPV-OS authority retired in favor of the canonical private JPV-OS repository.",
+  "allowed_activity": ["historical_readback", "migration_evidence", "security_preservation"],
+  "prohibited_activity": ["deployment", "production_authority", "new_feature_development", "runtime_promotion"]
+}
