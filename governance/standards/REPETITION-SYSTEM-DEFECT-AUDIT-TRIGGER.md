@@ -6,9 +6,9 @@ Authority: Founder directive
 Scope: all repositories, entities, subsystems, operators, agents, automations, workflows, runtimes, and future governed systems.
 
 ## Automatic trigger
-More than three Founder repetitions, restatements, reissues, or material corrections of the same matter automatically create a system/process defect flag. The fourth occurrence triggers it without further instruction.
+Three Founder repetitions, restatements, reissues, or material corrections of the same matter automatically create a system/process defect flag. The third occurrence triggers it without further instruction. The fourth occurrence triggers it without further instruction.
 
-`REPETITION_COUNT > 3 => SYSTEM_DEFECT_FLAG=TRUE`
+`REPETITION_COUNT >= 3 => SYSTEM_DEFECT_FLAG=TRUE`
 
 ## Mandatory response
 Flag the defect; audit execution/reasoning and the governing process; audit routing, continuity, authority, state persistence, validation, tooling and handoffs; identify root cause or exact fault boundary; remediate within available authority; strengthen recurrence prevention; validate against the original requirement and established constraints; perform authoritative readback for persistent changes; and record a defect receipt with trigger count, matter, cause/fault boundary, corrections, evidence, dependency and owner.
