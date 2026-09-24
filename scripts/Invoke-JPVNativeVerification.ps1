@@ -12,8 +12,10 @@ try {
   if($LASTEXITCODE -ne 0){throw 'Tracked-secret verification failed.'}
   if(-not (Test-Path -LiteralPath '.jpv/jpv-os-governance.json' -PathType Leaf)){throw 'Missing JPV-OS governance inheritance.'}
   if(-not (Test-Path -LiteralPath 'governance/security/JPV-SECURITY-INHERITANCE.json' -PathType Leaf)){throw 'Missing security inheritance.'}
-  $dependabot=Get-Content -LiteralPath '.github/dependabot.yml' -Raw
-  if($dependabot -match 'package-ecosystem:\s*["'']?github-actions'){throw 'Dependabot still maintains retired GitHub Actions.'}
+  if(Test-Path -LiteralPath '.github/dependabot.yml' -PathType Leaf){
+    $dependabot=Get-Content -LiteralPath '.github/dependabot.yml' -Raw
+    if($dependabot -match 'package-ecosystem:\s*["'']?github-actions'){throw 'Dependabot still maintains retired GitHub Actions.'}
+  }
   New-Item -ItemType Directory -Force '.jpv/receipts' | Out-Null
   [ordered]@{schema_version='jpv.native-verification.v1';repository='jaypVLabs/jaypv-os';commit_sha=$head;state='PASS';verification_authority='JPV_NATIVE';github_actions_authority=$false;verified_at_utc=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath '.jpv/receipts/native-verification.json' -Encoding utf8
   Write-Host "JPV native verification: PASS ($head)"
