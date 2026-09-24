@@ -8,7 +8,11 @@ Describe 'JPV legacy repository GitHub Actions retirement' {
     Test-Path -LiteralPath 'scripts/Invoke-JPVNativeVerification.ps1' -PathType Leaf | Should -BeTrue
   }
   It 'does not let Dependabot maintain GitHub Actions' {
-    $text = Get-Content -LiteralPath '.github/dependabot.yml' -Raw
-    $text | Should -Not -Match 'package-ecosystem:\s*["'']?github-actions'
+    if(Test-Path -LiteralPath '.github/dependabot.yml' -PathType Leaf){
+      $text = Get-Content -LiteralPath '.github/dependabot.yml' -Raw
+      $text | Should -Not -Match 'package-ecosystem:\s*["'']?github-actions'
+    } else {
+      Test-Path -LiteralPath '.github/dependabot.yml' -PathType Leaf | Should -BeFalse
+    }
   }
 }
